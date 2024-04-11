@@ -239,7 +239,7 @@
 
       // 6 wait till the data of washington counties and celltowers are fully loaded.
       let response, train, counties, sensitive;
-      response = await fetch("assets/Train2.geojson");
+      response = await fetch("assets/Train.geojson");
       train = await response.json();
       response = await fetch("assets/wacountydata.geojson");
       counties = await response.json();
@@ -330,8 +330,8 @@
           if (index === 0) { // When enter the first scene
 
             map.flyTo({
-              center: [-122.85, 47.6131229],
-              zoom: 7,
+              center: [-124.6, 47.6131229],
+              zoom: 6,
               pitch: 0,
               speed: 0.5
             }); // fly to a new location
