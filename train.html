@@ -181,7 +181,7 @@
 
   <script>
     // 1. Declare the maps, script panels, and different thematic layers.
-    let map, scriptPanel = scrollama(), countiesLayer, cellTowersLayer, sensitiveLayer;
+    let map, scriptPanel = scrollama(), countiesLayer, trainLayer, sensitiveLayer;
 
     // 2. Intialize the layout.
    
@@ -236,16 +236,15 @@
     // 5. define the asynchronous function to load geojson data and then performs the dependent actions.
     async function geojsonFetch() {
 
+
       // 6 wait till the data of washington counties and celltowers are fully loaded.
-      let response, celltowers, counties, sensitive, train;
+      let response, train, counties, sensitive;
+      response = await fetch("assets/Train2.geojson");
+      train = await response.json();
       response = await fetch("assets/wacountydata.geojson");
       counties = await response.json();
-      response = await fetch("assets/celltowers.geojson");
-      celltowers = await response.json();
       response = await fetch("assets/sensitive.geojson");
       sensitive = await response.json();
-      response = await fetch("assets/trainfull.geojson");
-      train = await response.json();
       
 
 
@@ -253,9 +252,9 @@
       map.on('load', () => {
 
         // 8. add map source and declare layers.
-        map.addSource('celltowers-src', {
+        map.addSource('train-src', {
           type: 'geojson',
-          data: celltowers
+          data: train
         });
 
         map.addSource('counties-src', {
@@ -268,14 +267,22 @@
           data: sensitive
         });
 
-        map.addSource('train-src', {
-          type: 'geojson',
-          data: train
-        });
+
 
 
 
         //declare layers
+
+        trainLayer = {
+          'id': 'train-lines',
+          'type': 'line',
+          'source': 'train-src',
+          'minzoom': 5,
+          'paint': {
+            'line-color': '#000000',
+            'line-width': 5
+          }
+        };
 
         countiesLayer = {
           'id': 'counties-polygons',
@@ -289,18 +296,6 @@
         };
 
 
-        cellTowersLayer = {
-          'id': 'celltowers-polygons',
-          'type': 'fill',
-          'source': 'celltowers-src',
-          'minzoom': 5,
-          'paint': {
-            'fill-color': '#000000',
-            'fill-opacity': 0.5
-
-          }
-        };
-
         sensitiveLayer = {
           'id': 'sensitive-polygons',
           'type': 'fill',
@@ -313,17 +308,7 @@
           }
         };
 
-        trainLayer = {
-          'id': 'train-lines',
-          'type': 'line',
-          'source': 'sensitive-src',
-          'minzoom': 5,
-          'paint': {
-            'line-color': '#000000',
-            'line-width': 5
 
-          }
-        };
 
 
 
@@ -375,18 +360,18 @@
               speed: 0.45
             });
 
-            if (typeof (map.getSource('celltowers-src')) == 'undefined') {
-              map.addSource('celltowers-src', {
+            if (typeof (map.getSource('train-src')) == 'undefined') {
+              map.addSource('train-src', {
                 type: 'geojson',
-                data: celltowers
+                data: train
               });
             } else {
-              map.getSource('celltowers-src').setData(celltowers);
+              map.getSource('train-src').setData(train);
 
             }
 
-            if (!map.getLayer("celltowers-polygons")) {
-              map.addLayer(cellTowersLayer);
+            if (!map.getLayer("train-lines")) {
+              map.addLayer(trainLayer);
             }
 
             
@@ -467,8 +452,8 @@
             }
 
           } else if (index === 1) {
-            if (map.getLayer("celltowers-polygons")) {
-              map.removeLayer('celltowers-polygons');
+            if (map.getLayer("train-lines")) {
+              map.removeLayer('train-lines');
             }
             if (response.direction == 'down') { 
               document.getElementById("cover").style.visibility = "hidden"; // when you scroll down, the cover page will be hided.
