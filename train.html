@@ -230,9 +230,9 @@
       let response, train, houses, sensitive;
       response = await fetch("assets/Train.geojson");
       train = await response.json();
-      response = await fetch("assets/houses.geojson");
+      response = await fetch("assets/Housing.json");
       houses = await response.json();
-      response = await fetch("assets/sensitive.geojson");
+      response = await fetch("assets/salish.geojson");
       sensitive = await response.json();
       
 
@@ -269,7 +269,7 @@
           'minzoom': 5,
           'paint': {
             'line-color': '#000000',
-            'line-width': 5
+            'line-width': 2
           }
         };
 
@@ -279,8 +279,8 @@
           'source': 'houses-src',
           'minzoom': 5,
           'paint': {
-            'fill-color': '#000000',
-            'fill-opacity': 0.5
+            'fill-color': '#cc0000',
+            'fill-opacity': 0.2
           }
         };
 
@@ -346,7 +346,7 @@
               center: [-122.5, 47.5],
               zoom: 10,
               pitch: 65,
-              speed: 0.45
+              speed: 0.5
             });
 
             if (typeof (map.getSource('train-src')) == 'undefined') {
@@ -370,10 +370,10 @@
           } else if (index === 2) {
             //Relocate to Seattle
             map.flyTo({
-              center: [-122.5, 47.5],
-              zoom: 11,
-              pitch: 30,
-              speed: 0.45
+              center: [-122.5, 47.6],
+              zoom: 18,
+              pitch: 20,
+              speed: 0.5
 
             });
 
@@ -382,6 +382,8 @@
                 type: 'geojson',
                 data: houses
               });
+              
+
             } else {
               map.getSource('houses-src').setData(houses);
 
@@ -391,11 +393,25 @@
               map.addLayer(housesLayer);
             }
 
+            if (typeof (map.getSource('train-src')) == 'undefined') {
+              map.addSource('train-src', {
+                type: 'geojson',
+                data: train
+              });
+            } else {
+              map.getSource('train-src').setData(train);
+
+            }
+
+            if (!map.getLayer("train-polygons")) {
+              map.addLayer(trainLayer);
+            }
+
           } else if (index === 3) {
 
             map.flyTo({
-              center: [-124.93, 47.33],
-              zoom: 6,
+              center: [-122.5, 47.6],
+              zoom: 10,
               pitch: 20,
               speed: 0.5
             
@@ -455,6 +471,13 @@
           } else if (index === 2) {
             if (map.getLayer("houses-polygons")) {
               map.removeLayer('houses-polygons');
+            }
+            if (response.direction == 'down') { 
+              document.getElementById("cover").style.visibility = "hidden"; // when you scroll down, the cover page will be hided.
+            } else {
+              document.getElementById("cover").style.visibility = "visible"; // when you scroll up, the cover page will be shown.
+            } if (map.getLayer("train-lines")) {
+              map.removeLayer('train-lines');
             }
             if (response.direction == 'down') { 
               document.getElementById("cover").style.visibility = "hidden"; // when you scroll down, the cover page will be hided.
