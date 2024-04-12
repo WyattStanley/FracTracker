@@ -121,7 +121,19 @@
     <article class="scene" data-scene="4">
       <h2>5: Effects on Wetlands</h2>
         <p>
-
+          6,843 Wetland areas.
+          <br>
+          1247: "Forested wetland" means any wetland or portion thereof that has, or if the trees were mature would have, a crown closure of 30 percent or more
+          <br>
+          296: Other
+          <br>
+          4,541: (a) "Type A Wetland" classification shall be applied to all nonforested wetlands which:
+          <br>
+          (i) Are greater than 0.5 acre in size, including any acreage of open water where the water is completely surrounded by the wetland; and
+          <br>
+          (ii) Are associated with at least 0.5 acre of ponded or standing open water. The open water must be present on the site for at least 7 consecutive days between 
+          <br>
+          759: (b) "Type B Wetland" classification shall be applied to all other nonforested wetlands greater than 0.25 acre.
         <p>
             
     </article>
@@ -170,7 +182,7 @@
 
   <script>
     // 1. Declare the maps, script panels, and different thematic layers.
-    let map, scriptPanel = scrollama(), housesLayer, trainLayer, sensitiveLayer, spillsLayer;
+    let map, scriptPanel = scrollama(), housesLayer, trainLayer, sensitiveLayer, spillsLayer, wetLayer;
 
     // 2. Intialize the layout.
    
@@ -227,7 +239,7 @@
 
 
       // 6 wait till the data of washington counties and celltowers are fully loaded.
-      let response, train, houses, sensitive, spills;
+      let response, train, houses, sensitive, spills, wet;
       response = await fetch("assets/Train.geojson");
       train = await response.json();
       response = await fetch("assets/Housing.json");
@@ -236,6 +248,8 @@
       sensitive = await response.json();
       response = await fetch("assets/TrainSpills.json")
       spills = await response.json();
+      response = await fetch("assets/wetlands.json")
+      wet = await response.json();
       
 
 
@@ -262,7 +276,11 @@
           type: 'geojson',
           data: spills
         });
-
+        
+        map.addSource('wet-src', {
+          type: 'geojson',
+          data: wet
+        });
 
 
 
@@ -317,6 +335,18 @@
           }
         };
 
+        wetLayer = {
+          'id': 'wet-polygons',
+          'type': 'fill',
+          'source': 'wet-src',
+          'minzoom': 5,
+          'paint': {
+            'fill-color': '#cc0000',
+            'fill-opacity': 0.2
+
+          }
+        };
+
 
 
 
@@ -336,6 +366,8 @@
 
           var index = response.index; // capture the id of the current scene. 
 
+          // Train Overview
+          
           if (index === 0) { // When enter the first scene
 
             map.flyTo({
@@ -384,7 +416,7 @@
             }
 
           
-          //Cities and waterways.
+          //Seattle Close up
 
             
           } else if (index === 2) {
@@ -393,7 +425,7 @@
               center: [-122.5, 47.6],
               zoom: 18,
               pitch: 20,
-              speed: 0.5
+              speed: 0.2
 
             });
 
@@ -427,6 +459,48 @@
               map.addLayer(trainLayer);
             }
 
+          //Housing 
+
+          } else if (index === 3) {
+
+            map.flyTo({
+              center: [-122.7, 47.3],
+              zoom: 15,
+              pitch: 60,
+              speed: 0.2
+            
+            });
+
+            if (typeof (map.getSource('sensitive-src')) == 'undefined') {
+              map.addSource('sensitive-src', {
+                type: 'geojson',
+                data: sensitive
+              });
+            } else {
+              map.getSource('sensitive-src').setData(sensitive);
+
+            }
+
+            if (!map.getLayer("sesitive-polygons")) {
+              map.addLayer(sensitiveLayer);
+            }
+
+            if (typeof (map.getSource('train-src')) == 'undefined') {
+              map.addSource('train-src', {
+                type: 'geojson',
+                data: train
+              });
+            } else {
+              map.getSource('train-src').setData(train);
+
+            }
+
+            if (!map.getLayer("train-polygons")) {
+              map.addLayer(trainLayer);
+            }
+
+          // Puget Sound
+
           } else if (index === 3) {
 
             map.flyTo({
@@ -465,43 +539,7 @@
               map.addLayer(trainLayer);
             }
 
-          } else if (index === 3) {
-
-            map.flyTo({
-              center: [-122.7, 47.3],
-              zoom: 15,
-              pitch: 60,
-              speed: 0.5
-            
-            });
-
-            if (typeof (map.getSource('sensitive-src')) == 'undefined') {
-              map.addSource('sensitive-src', {
-                type: 'geojson',
-                data: sensitive
-              });
-            } else {
-              map.getSource('sensitive-src').setData(sensitive);
-
-            }
-
-            if (!map.getLayer("sesitive-polygons")) {
-              map.addLayer(sensitiveLayer);
-            }
-
-            if (typeof (map.getSource('train-src')) == 'undefined') {
-              map.addSource('train-src', {
-                type: 'geojson',
-                data: train
-              });
-            } else {
-              map.getSource('train-src').setData(train);
-
-            }
-
-            if (!map.getLayer("train-polygons")) {
-              map.addLayer(trainLayer);
-            }
+          // Spill Points
 
           } else if (index === 4) {
 
@@ -512,6 +550,20 @@
               speed: 0.5
 
             });
+
+            if (typeof (map.getSource('train-src')) == 'undefined') {
+              map.addSource('train-src', {
+                type: 'geojson',
+                data: train
+              });
+            } else {
+              map.getSource('train-src').setData(train);
+
+            }
+
+            if (!map.getLayer("train-polygons")) {
+              map.addLayer(trainLayer);
+            }
 
             if (typeof (map.getSource('spills-src')) == 'undefined') {
               map.addSource('spills-src', {
@@ -527,6 +579,16 @@
               map.addLayer(spillsLayer);
             }
 
+          } else if (index === 5) {
+
+            map.flyTo({
+              center: [-122.7, 47.3],
+              zoom: 7,
+              pitch: 0,
+              speed: 0.5
+
+            });
+
             if (typeof (map.getSource('train-src')) == 'undefined') {
               map.addSource('train-src', {
                 type: 'geojson',
@@ -540,6 +602,22 @@
             if (!map.getLayer("train-polygons")) {
               map.addLayer(trainLayer);
             }
+
+            if (typeof (map.getSource('wet-src')) == 'undefined') {
+              map.addSource('wet-src', {
+                type: 'geojson',
+                data: wet
+              });
+            } else {
+              map.getSource('wet-src').setData(wet);
+
+            }
+
+            if (!map.getLayer("wet-polygons")) {
+              map.addLayer(wetLayer);
+            }
+
+
 
           } else if (index === 6) {
 
@@ -615,6 +693,23 @@
           } else if (index === 4) {
             if (map.getLayer("spills-points")) {
               map.removeLayer('spills-points');
+            }
+            if (response.direction == 'down') { 
+              document.getElementById("cover").style.visibility = "hidden"; // when you scroll down, the cover page will be hided.
+            } else {
+              document.getElementById("cover").style.visibility = "visible"; // when you scroll up, the cover page will be shown.
+            } if (map.getLayer("train-lines")) {
+              map.removeLayer('train-lines');
+            }
+            if (response.direction == 'down') { 
+              document.getElementById("cover").style.visibility = "hidden"; // when you scroll down, the cover page will be hided.
+            } else {
+              document.getElementById("cover").style.visibility = "visible"; // when you scroll up, the cover page will be shown.
+            }
+
+          } else if (index === 5) {
+            if (map.getLayer("wet-polygons")) {
+              map.removeLayer('wet-polygons');
             }
             if (response.direction == 'down') { 
               document.getElementById("cover").style.visibility = "hidden"; // when you scroll down, the cover page will be hided.
