@@ -248,7 +248,7 @@
       sensitive = await response.json();
       response = await fetch("assets/TrainSpills.json")
       spills = await response.json();
-      response = await fetch("assets/wetlands.json")
+      response = await fetch("assets/wetlandsample.json")
       wet = await response.json();
       
 
@@ -366,7 +366,7 @@
 
           var index = response.index; // capture the id of the current scene. 
 
-          // Train Overview
+          // Overview
           
           if (index === 0) { // When enter the first scene
 
@@ -393,6 +393,7 @@
             document.getElementById("cover").style.visibility = "hidden"; // Hide the cover page
         
 
+            // Seattle
         } else if (index === 1) { // When enter the second scene.
             map.flyTo({
               center: [-122.5, 47.5],
@@ -416,8 +417,7 @@
             }
 
           
-          //Seattle Close up
-
+         //Housing
             
           } else if (index === 2) {
             //Relocate to Seattle
@@ -459,47 +459,7 @@
               map.addLayer(trainLayer);
             }
 
-          //Housing 
-
-          } else if (index === 3) {
-
-            map.flyTo({
-              center: [-122.7, 47.3],
-              zoom: 15,
-              pitch: 60,
-              speed: 0.2
-            
-            });
-
-            if (typeof (map.getSource('sensitive-src')) == 'undefined') {
-              map.addSource('sensitive-src', {
-                type: 'geojson',
-                data: sensitive
-              });
-            } else {
-              map.getSource('sensitive-src').setData(sensitive);
-
-            }
-
-            if (!map.getLayer("sesitive-polygons")) {
-              map.addLayer(sensitiveLayer);
-            }
-
-            if (typeof (map.getSource('train-src')) == 'undefined') {
-              map.addSource('train-src', {
-                type: 'geojson',
-                data: train
-              });
-            } else {
-              map.getSource('train-src').setData(train);
-
-            }
-
-            if (!map.getLayer("train-polygons")) {
-              map.addLayer(trainLayer);
-            }
-
-          // Puget Sound
+          //Puget Sound
 
           } else if (index === 3) {
 
@@ -579,12 +539,14 @@
               map.addLayer(spillsLayer);
             }
 
+          // Wetlands
+
           } else if (index === 5) {
 
             map.flyTo({
               center: [-122.7, 47.3],
-              zoom: 7,
-              pitch: 0,
+              zoom: 10,
+              pitch: 70,
               speed: 0.5
 
             });
@@ -624,7 +586,7 @@
             map.flyTo({
               center: [-122.4121036, 47.6131229],
               zoom: 7,
-              pitch: 0,
+              pitch: 60,
               speed: 0.5
 
             });
