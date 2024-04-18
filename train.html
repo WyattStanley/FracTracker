@@ -261,7 +261,7 @@
       tribe = await response.json();
       response = await fetch("assets/Full_Tribal.geojson")
       full_tribe = await response.json();
-      response = await fetch("assets/rail.geojson");
+      response = await fetch("assets/rail2.geojson");
       rail = await response.json();
 
 
@@ -358,8 +358,8 @@
           'minzoom': 5,
           'paint': {
             'circle-color': '#cc0000',
-            'circle-radius': 6,
-            'circle-opacity': 0.5,
+            'circle-radius': 7,
+            'circle-opacity': 0.8,
 
           }
         };
@@ -618,6 +618,20 @@
 
           });
 
+          if (typeof (map.getSource('full_tribe-src')) == 'undefined') {
+            map.addSource('full_tribe-src', {
+              type: 'geojson',
+              data: full_tribe
+            });
+          } else {
+            map.getSource('full_tribe-src').setData(full_tribe);
+
+          }
+
+          if (!map.getLayer("full_tribe-polygons")) {
+            map.addLayer(full_tribeLayer);
+          }
+
           if (typeof (map.getSource('train-src')) == 'undefined') {
             map.addSource('train-src', {
               type: 'geojson',
@@ -652,12 +666,26 @@
         } else if (index === 6) {
 
           map.flyTo({
-            center: [-122.7, 47.3],
-            zoom: 7,
+            center: [-122.75, 48.45],
+            zoom: 10,
             pitch: 0,
             speed: 0.5
 
           });
+
+          if (typeof (map.getSource('rail-src')) == 'undefined') {
+            map.addSource('rail-src', {
+              type: 'geojson',
+              data: rail
+            });
+          } else {
+            map.getSource('rail-src').setData(rail);
+
+          }
+
+          if (!map.getLayer("rail-lines")) {
+            map.addLayer(railLayer);
+          }
 
           if (typeof (map.getSource('full_tribe-src')) == 'undefined') {
             map.addSource('full_tribe-src', {
@@ -687,11 +715,43 @@
             map.addLayer(trainLayer);
           }
 
-          if (typeof (map.getSource('rail-src')) == 'undefined') {
+          if (typeof (map.getSource('spills-src')) == 'undefined') {
+            map.addSource('spills-src', {
+              type: 'geojson',
+              data: spills
+            });
+          } else {
+            map.getSource('spills-src').setData(spills);
+
+          }
+
+          if (!map.getLayer("spills-points")) {
+            map.addLayer(spillsLayer);
+          }
+
+
+
+          
+
+          
+
+
+          } else if (index === 7) {
+
+            map.flyTo({
+              center: [-122.75, 48.8],
+              zoom: 10,
+              pitch: 0,
+              speed: 0.5
+
+            });
+
+            if (typeof (map.getSource('rail-src')) == 'undefined') {
             map.addSource('rail-src', {
               type: 'geojson',
               data: rail
             });
+
           } else {
             map.getSource('rail-src').setData(rail);
 
@@ -699,6 +759,34 @@
 
           if (!map.getLayer("rail-lines")) {
             map.addLayer(railLayer);
+          }
+
+          if (typeof (map.getSource('full_tribe-src')) == 'undefined') {
+            map.addSource('full_tribe-src', {
+              type: 'geojson',
+              data: full_tribe
+            });
+          } else {
+            map.getSource('full_tribe-src').setData(full_tribe);
+
+          }
+
+          if (!map.getLayer("full_tribe-polygons")) {
+            map.addLayer(full_tribeLayer);
+          }
+
+          if (typeof (map.getSource('train-src')) == 'undefined') {
+            map.addSource('train-src', {
+              type: 'geojson',
+              data: train
+            });
+          } else {
+            map.getSource('train-src').setData(train);
+
+          }
+
+          if (!map.getLayer("train-lines")) {
+            map.addLayer(trainLayer);
           }
 
           if (typeof (map.getSource('spills-src')) == 'undefined') {
@@ -714,21 +802,6 @@
           if (!map.getLayer("spills-points")) {
             map.addLayer(spillsLayer);
           }
-
-          
-
-          
-
-
-          } else if (index === 7) {
-
-            map.flyTo({
-              center: [-122.4121036, 47.6131229],
-              zoom: 7,
-              pitch: 60,
-              speed: 0.5
-
-            });
 
 
           }
@@ -816,8 +889,19 @@
               document.getElementById("cover").style.visibility = "hidden"; // when you scroll down, the cover page will be hided.
             } else {
               document.getElementById("cover").style.visibility = "visible"; // when you scroll up, the cover page will be shown.
-            } if (map.getLayer("train-lines")) {
+            }
+            
+            if (map.getLayer("train-lines")) {
               map.removeLayer('train-lines');
+            }
+            if (response.direction == 'down') { 
+              document.getElementById("cover").style.visibility = "hidden"; // when you scroll down, the cover page will be hided.
+            } else {
+              document.getElementById("cover").style.visibility = "visible"; // when you scroll up, the cover page will be shown.
+            }
+
+            if (map.getLayer("full_tribe-polygons")) {
+              map.removeLayer('full_tribe-polygons');
             }
             if (response.direction == 'down') { 
               document.getElementById("cover").style.visibility = "hidden"; // when you scroll down, the cover page will be hided.
@@ -827,14 +911,7 @@
 
 
           } else if (index === 6) {
-            if (map.getLayer("spills-points")) {
-              map.removeLayer('spills-points');
-            }
-            if (response.direction == 'down') { 
-              document.getElementById("cover").style.visibility = "hidden"; // when you scroll down, the cover page will be hided.
-            } else {
-              document.getElementById("cover").style.visibility = "visible"; // when you scroll up, the cover page will be shown.
-            } 
+
             
             if (map.getLayer("train-lines")) {
               map.removeLayer('train-lines');
@@ -863,6 +940,55 @@
               document.getElementById("cover").style.visibility = "visible"; // when you scroll up, the cover page will be shown.
             }
 
+            if (map.getLayer("spills-points")) {
+              map.removeLayer('spills-points');
+            }
+            if (response.direction == 'down') { 
+              document.getElementById("cover").style.visibility = "hidden"; // when you scroll down, the cover page will be hided.
+            } else {
+              document.getElementById("cover").style.visibility = "visible"; // when you scroll up, the cover page will be shown.
+            } 
+
+
+          } else if (index === 7) {
+
+            
+            if (map.getLayer("train-lines")) {
+              map.removeLayer('train-lines');
+            }
+            if (response.direction == 'down') { 
+              document.getElementById("cover").style.visibility = "hidden"; // when you scroll down, the cover page will be hided.
+            } else {
+              document.getElementById("cover").style.visibility = "visible"; // when you scroll up, the cover page will be shown.
+            }
+
+            if (map.getLayer("rail-lines")) {
+              map.removeLayer('rail-lines');
+            }
+            if (response.direction == 'down') { 
+              document.getElementById("cover").style.visibility = "hidden"; // when you scroll down, the cover page will be hided.
+            } else {
+              document.getElementById("cover").style.visibility = "visible"; // when you scroll up, the cover page will be shown.
+            }
+
+            if (map.getLayer("full_tribe-polygons")) {
+              map.removeLayer('full_tribe-polygons');
+            }
+            if (response.direction == 'down') { 
+              document.getElementById("cover").style.visibility = "hidden"; // when you scroll down, the cover page will be hided.
+            } else {
+              document.getElementById("cover").style.visibility = "visible"; // when you scroll up, the cover page will be shown.
+            }
+
+            if (map.getLayer("spills-points")) {
+              map.removeLayer('spills-points');
+            }
+            if (response.direction == 'down') { 
+              document.getElementById("cover").style.visibility = "hidden"; // when you scroll down, the cover page will be hided.
+            } else {
+              document.getElementById("cover").style.visibility = "visible"; // when you scroll up, the cover page will be shown.
+            } 
+
 
 
             
@@ -884,7 +1010,19 @@
       closeOnClick: true
     });
 
-    // Add click event listener for tribal polygons
+    let SwinomishPopup = new mapboxgl.Popup({
+      closeButton: true,
+      closeOnClick: true
+    });
+
+    let full_tribalPopup = new mapboxgl.Popup({
+      closeButton: true,
+      closeOnClick: true
+    });
+
+    
+
+    // TRIBE INTERSECT
     map.on('click', 'tribe-polygons', function(e) {
       let feature = e.features[0];
       let popupContent = `<h3>${feature.properties.TRIBAL_NM1}</h3>
@@ -900,7 +1038,7 @@
       map.getCanvas().style.cursor = '';
     });
 
-    // Add click event listener for wetland polygons
+    // WETLANDS
     map.on('click', 'wet-polygons', function(e) {
       let feature = e.features[0];
       let popupContent = `<h3>${feature.properties.WLND_TYPE}</h3>
@@ -916,8 +1054,48 @@
       map.getCanvas().style.cursor = '';
     });
 
+
+    // CRASH SITES
+    map.on('click', 'spills-points', function(e) {
+      let feature = e.features[0];
+      let popupContent = `<h3>${feature.properties.Date}</h3>
+                          <p>${feature.properties.Gallons_Sp} : gallons of oil </p>`;
+      wetlandPopup.setLngLat(e.lngLat).setHTML(popupContent).addTo(map);
+    });
+
+    map.on('mouseenter', 'spills-points', function() {
+      map.getCanvas().style.cursor = 'pointer';
+    });
+
+    map.on('mouseleave', 'spills-points', function() {
+      map.getCanvas().style.cursor = '';
+    });
+
+
+    // FUll TRIBAL
+    map.on('click', 'full_tribe-polygons', function(e) {
+      let feature = e.features[0];
+      let popupContent = `<h3>${feature.properties.TRIBAL_NM1}</h3>`;
+
+      tribalPopup.setLngLat(e.lngLat).setHTML(popupContent).addTo(map);
+    });
+
+    map.on('mouseenter', 'full_tribe-polygons', function() {
+      map.getCanvas().style.cursor = 'pointer';
+    });
+
+    map.on('mouseleave', 'full_tribe-polygons', function() {
+      map.getCanvas().style.cursor = '';
+    });
+
+
+
+
+
     const nav = new mapboxgl.NavigationControl();
     map.addControl(nav, 'top-right');
+
+
 
 
 
