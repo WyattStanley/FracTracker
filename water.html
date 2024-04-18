@@ -174,10 +174,9 @@
     <h2>Wyatt Stanley</h2>
   </section>
 
-
   <script>
     // 1. Declare the maps, script panels, and different thematic layers.
-    let map, scriptPanel = scrollama(), countiesLayer, cellTowersLayer, sensitiveLayer;
+    let map, scriptPanel = scrollama(), housesLayer, trainLayer, sensitiveLayer, spillsLayer, wetLayer, tribeLayer, full_tribeLayer, railLayer;
 
     // 2. Intialize the layout.
    
@@ -232,28 +231,40 @@
     // 5. define the asynchronous function to load geojson data and then performs the dependent actions.
     async function geojsonFetch() {
 
+
       // 6 wait till the data of washington counties and celltowers are fully loaded.
-      let response, celltowers, counties, sensitive;
-      response = await fetch("assets/wacountydata.geojson");
-      counties = await response.json();
+      let response, train, houses, sensitive, spills, wet, tribe, full_tribe;
+      response = await fetch("assets/Train.geojson");
+      train = await response.json();
+      response = await fetch("assets/Housing.json");
+      houses = await response.json();
       response = await fetch("assets/celltowers.geojson");
-      celltowers = await response.json();
-      response = await fetch("assets/sensitive.geojson");
       sensitive = await response.json();
+      response = await fetch("assets/crash.geojson")
+      spills = await response.json();
+      response = await fetch("assets/wetland.geojson")
+      wet = await response.json();
+      response = await fetch("assets/tribal_int.geojson")
+      tribe = await response.json();
+      response = await fetch("assets/Full_Tribal.geojson")
+      full_tribe = await response.json();
+      response = await fetch("assets/rail2.geojson");
+      rail = await response.json();
+
 
 
       // 7. Trigger operations inside of the the ()=> {} funciton while loading the map.
       map.on('load', () => {
 
         // 8. add map source and declare layers.
-        map.addSource('celltowers-src', {
+        map.addSource('train-src', {
           type: 'geojson',
-          data: celltowers
+          data: train
         });
 
-        map.addSource('counties-src', {
+        map.addSource('houses-src', {
           type: 'geojson',
-          data: counties
+          data: houses
         });
 
         map.addSource('sensitive-src', {
@@ -261,31 +272,59 @@
           data: sensitive
         });
 
+        map.addSource('spills-src', {
+          type: 'geojson',
+          data: spills
+        });
+        
+        map.addSource('wet-src', {
+          type: 'geojson',
+          data: wet
+        });
+
+        map.addSource('tribe-src', {
+          type: 'geojson',
+          data: tribe
+        });
+
+        map.addSource('full_tribe-src', {
+          type: 'geojson',
+          data: full_tribe
+        });
+
+        map.addSource('rail-src', {
+          type: 'geojson',
+          data: rail
+        });
+
+
+
+
         //declare layers
 
-        countiesLayer = {
-          'id': 'counties-lines',
+        trainLayer = {
+          'id': 'train-lines',
           'type': 'line',
-          'source': 'counties-src',
+          'source': 'train-src',
           'minzoom': 5,
           'paint': {
             'line-color': '#000000',
-            'line-width': 5
+            'line-width': 1.5
+            
           }
         };
 
-
-        cellTowersLayer = {
-          'id': 'celltowers-polygons',
+        housesLayer = {
+          'id': 'houses-polygons',
           'type': 'fill',
-          'source': 'celltowers-src',
+          'source': 'houses-src',
           'minzoom': 5,
           'paint': {
-            'fill-color': '#000000',
+            'fill-color': '#cc0000',
             'fill-opacity': 0.5
-
           }
         };
+
 
         sensitiveLayer = {
           'id': 'sensitive-polygons',
@@ -293,11 +332,75 @@
           'source': 'sensitive-src',
           'minzoom': 5,
           'paint': {
-            'fill-color': '#000000',
+            'fill-color': '#cc0000',
+            'fill-opacity': 0.3
+
+          }
+        };
+
+        spillsLayer = {
+          'id': 'spills-points',
+          'type': 'circle',
+          'source': 'spills-src',
+          'minzoom': 5,
+          'paint': {
+            'circle-color': '#cc0000',
+            'circle-radius': 6,
+            'circle-opacity': 0.8,
+
+          }
+        };
+
+        wetLayer = {
+          'id': 'wet-polygons',
+          'type': 'fill',
+          'source': 'wet-src',
+          'minzoom': 5,
+          'paint': {
+            'fill-color': '#cc0000',
             'fill-opacity': 0.5
 
           }
         };
+
+        tribeLayer = {
+          'id': 'tribe-polygons',
+          'type': 'fill',
+          'source': 'tribe-src',
+          'minzoom': 5,
+          'paint': {
+            'fill-color': '#cc0000',
+            'fill-opacity': 1
+
+          }
+        };
+
+        full_tribeLayer = {
+          'id': 'full_tribe-polygons',
+          'type': 'fill',
+          'source': 'full_tribe-src',
+          'minzoom': 5,
+          'paint': {
+            'fill-color': '#00cc00',
+            'fill-opacity': 0.3
+
+          }
+        };
+
+        railLayer = {
+          'id': 'rail-lines',
+          'type': 'line',
+          'source': 'rail-src',
+          'minzoom': 5,
+          'paint': {
+            'line-color': '#000000',
+            'line-width': 1.5
+            
+          }
+        };
+
+
+
 
 
 
@@ -316,84 +419,107 @@
 
           var index = response.index; // capture the id of the current scene. 
 
+          // Overview
+          
           if (index === 0) { // When enter the first scene
 
             map.flyTo({
-              center: [-122.85, 47.6131229],
-              zoom: 9.5,
+              center: [-124.6, 47.6131229],
+              zoom: 6,
               pitch: 0,
               speed: 0.5
             }); // fly to a new location
             
-            if (typeof (map.getSource('celltowers-src')) == 'undefined') { //if the map source 'counties-src' does not exist
-              map.addSource('celltowers-src', {
+            if (typeof (map.getSource('train-src')) == 'undefined') { //if the map source 'counties-src' does not exist
+              map.addSource('train-src', {
                 type: 'geojson',
-                data: celltowers
+                data: train
               }); // reload the map source of 'counties-src'
             } else {
-              map.getSource('counties-src').setData(celltowers); // if the map source does not exist, relaod the data counties to the pre-defined map source 'counties-src'.
+              map.getSource('train-src').setData(train); // if the map source does not exist, relaod the data counties to the pre-defined map source 'counties-src'.
 
             }
 
-            if (!map.getLayer("celltowers-polygons")) { // if the map layer 'counties-polygons' does not exit
-              map.addLayer(cellTowersLayer);
+            if (!map.getLayer("train-lines")) { // if the map layer 'counties-polygons' does not exit
+              map.addLayer(trainLayer);
             }
             document.getElementById("cover").style.visibility = "hidden"; // Hide the cover page
         
 
+            // Seattle
         } else if (index === 1) { // When enter the second scene.
             map.flyTo({
-              center: [-123, 47.33],
-              zoom: 910,
+              center: [-122.5, 47.5],
+              zoom: 10,
               pitch: 65,
-              speed: 0.45
+              speed: 0.5
             });
 
-            if (typeof (map.getSource('celltowers-src')) == 'undefined') {
-              map.addSource('celltowers-src', {
+            if (typeof (map.getSource('train-src')) == 'undefined') {
+              map.addSource('train-src', {
                 type: 'geojson',
-                data: celltowers
+                data: train
               });
             } else {
-              map.getSource('celltowers-src').setData(celltowers);
+              map.getSource('train-src').setData(train);
 
             }
 
-            if (!map.getLayer("celltowers-polygons")) {
-              map.addLayer(cellTowersLayer);
+            if (!map.getLayer("train-lines")) {
+              map.addLayer(trainLayer);
             }
 
+          
+         //Housing
             
           } else if (index === 2) {
             //Relocate to Seattle
             map.flyTo({
-              center: [-124.93, 47.33],
-              zoom: 7.5,
-              pitch: 30,
-              speed: 0.45
+              center: [-122.5, 47.6],
+              zoom: 20,
+              pitch: 20,
+              speed: 0.2
 
             });
 
-            if (typeof (map.getSource('counties-src')) == 'undefined') {
-              map.addSource('counties-src', {
+            if (typeof (map.getSource('houses-src')) == 'undefined') {
+              map.addSource('houses-src', {
                 type: 'geojson',
-                data: counties
+                data: houses
+              });
+              
+
+            } else {
+              map.getSource('houses-src').setData(houses);
+
+            }
+
+            if (!map.getLayer("houses-polygons")) {
+              map.addLayer(housesLayer);
+            }
+
+            if (typeof (map.getSource('train-src')) == 'undefined') {
+              map.addSource('train-src', {
+                type: 'geojson',
+                data: train
               });
             } else {
-              map.getSource('counties-src').setData(counties);
+              map.getSource('train-src').setData(train);
 
             }
 
-            if (!map.getLayer("counties-polygons")) {
-              map.addLayer(countiesLayer);
+            if (!map.getLayer("train-lines")) {
+              map.addLayer(trainLayer);
             }
+
+          //Puget Sound
 
           } else if (index === 3) {
 
             map.flyTo({
-              center: [-124.93, 47.33],
-              zoom: 6,
-              pitch: 20,
+              center: [-122.7, 47.3],
+              zoom: 15,
+              pitch: 60,
               speed: 0.5
             
             });
@@ -412,15 +538,257 @@
               map.addLayer(sensitiveLayer);
             }
 
-          } else if (index === 6) {
+            if (typeof (map.getSource('train-src')) == 'undefined') {
+              map.addSource('train-src', {
+                type: 'geojson',
+                data: train
+              });
+            } else {
+              map.getSource('train-src').setData(train);
+
+            }
+
+            if (!map.getLayer("train-lines")) {
+              map.addLayer(trainLayer);
+            }
+
+          // Wetlands
+
+        } else if (index === 4) {
+
+          map.flyTo({
+            center: [-123, 45.75],
+            zoom: 10,
+            pitch: 70,
+            speed: 0.5
+
+          });
+
+          if (typeof (map.getSource('train-src')) == 'undefined') {
+            map.addSource('train-src', {
+              type: 'geojson',
+              data: train
+            });
+          } else {
+            map.getSource('train-src').setData(train);
+
+          }
+
+          if (!map.getLayer("train-lines")) {
+            map.addLayer(trainLayer);
+          }
+
+          if (typeof (map.getSource('wet-src')) == 'undefined') {
+            map.addSource('wet-src', {
+              type: 'geojson',
+              data: wet
+            });
+          } else {
+            map.getSource('wet-src').setData(wet);
+
+          }
+
+          if (!map.getLayer("wet-polygons")) {
+            map.addLayer(wetLayer);
+          }
+
+
+          // tribal lands
+
+        } else if (index === 5) {
+
+          map.flyTo({
+            center: [-122.7, 47.3],
+            zoom: 7,
+            pitch: 0,
+            speed: 0.5
+
+          });
+
+          if (typeof (map.getSource('full_tribe-src')) == 'undefined') {
+            map.addSource('full_tribe-src', {
+              type: 'geojson',
+              data: full_tribe
+            });
+          } else {
+            map.getSource('full_tribe-src').setData(full_tribe);
+
+          }
+
+          if (!map.getLayer("full_tribe-polygons")) {
+            map.addLayer(full_tribeLayer);
+          }
+
+          if (typeof (map.getSource('train-src')) == 'undefined') {
+            map.addSource('train-src', {
+              type: 'geojson',
+              data: train
+            });
+          } else {
+            map.getSource('train-src').setData(train);
+
+          }
+
+          if (!map.getLayer("train-lines")) {
+            map.addLayer(trainLayer);
+          }
+
+          if (typeof (map.getSource('tribe-src')) == 'undefined') {
+            map.addSource('tribe-src', {
+              type: 'geojson',
+              data: tribe
+            });
+          } else {
+            map.getSource('tribe-src').setData(tribe);
+
+          }
+
+          if (!map.getLayer("tribe-polygons")) {
+            map.addLayer(tribeLayer);
+          }
+
+
+          // Points
+
+        } else if (index === 6) {
+
+          map.flyTo({
+            center: [-122.75, 48.45],
+            zoom: 10,
+            pitch: 0,
+            speed: 0.5
+
+          });
+
+          if (typeof (map.getSource('rail-src')) == 'undefined') {
+            map.addSource('rail-src', {
+              type: 'geojson',
+              data: rail
+            });
+          } else {
+            map.getSource('rail-src').setData(rail);
+
+          }
+
+          if (!map.getLayer("rail-lines")) {
+            map.addLayer(railLayer);
+          }
+
+          if (typeof (map.getSource('full_tribe-src')) == 'undefined') {
+            map.addSource('full_tribe-src', {
+              type: 'geojson',
+              data: full_tribe
+            });
+          } else {
+            map.getSource('full_tribe-src').setData(full_tribe);
+
+          }
+
+          if (!map.getLayer("full_tribe-polygons")) {
+            map.addLayer(full_tribeLayer);
+          }
+
+          if (typeof (map.getSource('train-src')) == 'undefined') {
+            map.addSource('train-src', {
+              type: 'geojson',
+              data: train
+            });
+          } else {
+            map.getSource('train-src').setData(train);
+
+          }
+
+          if (!map.getLayer("train-lines")) {
+            map.addLayer(trainLayer);
+          }
+
+          if (typeof (map.getSource('spills-src')) == 'undefined') {
+            map.addSource('spills-src', {
+              type: 'geojson',
+              data: spills
+            });
+          } else {
+            map.getSource('spills-src').setData(spills);
+
+          }
+
+          if (!map.getLayer("spills-points")) {
+            map.addLayer(spillsLayer);
+          }
+
+
+
+          
+
+          
+
+
+          } else if (index === 7) {
 
             map.flyTo({
-              center: [-122.4121036, 47.6131229],
-              zoom: 7,
+              center: [-122.75, 48.8],
+              zoom: 10,
               pitch: 0,
               speed: 0.5
 
             });
+
+            if (typeof (map.getSource('rail-src')) == 'undefined') {
+            map.addSource('rail-src', {
+              type: 'geojson',
+              data: rail
+            });
+
+          } else {
+            map.getSource('rail-src').setData(rail);
+
+          }
+
+          if (!map.getLayer("rail-lines")) {
+            map.addLayer(railLayer);
+          }
+
+          if (typeof (map.getSource('full_tribe-src')) == 'undefined') {
+            map.addSource('full_tribe-src', {
+              type: 'geojson',
+              data: full_tribe
+            });
+          } else {
+            map.getSource('full_tribe-src').setData(full_tribe);
+
+          }
+
+          if (!map.getLayer("full_tribe-polygons")) {
+            map.addLayer(full_tribeLayer);
+          }
+
+          if (typeof (map.getSource('train-src')) == 'undefined') {
+            map.addSource('train-src', {
+              type: 'geojson',
+              data: train
+            });
+          } else {
+            map.getSource('train-src').setData(train);
+
+          }
+
+          if (!map.getLayer("train-lines")) {
+            map.addLayer(trainLayer);
+          }
+
+          if (typeof (map.getSource('spills-src')) == 'undefined') {
+            map.addSource('spills-src', {
+              type: 'geojson',
+              data: spills
+            });
+          } else {
+            map.getSource('spills-src').setData(spills);
+
+          }
+
+          if (!map.getLayer("spills-points")) {
+            map.addLayer(spillsLayer);
+          }
 
 
           }
@@ -431,33 +799,18 @@
           var index = response.index;
 
           if (index === 0) {
-            if (map.getLayer("celltowers-polygons")) {
-              map.removeLayer('celltowers-polygons');
-            }
-            if (response.direction == 'down') { 
-              document.getElementById("cover").style.visibility = "hidden"; // when you scroll down, the cover page will be hided.
-            } else {
-              document.getElementById("cover").style.visibility = "visible"; // when you scroll up, the cover page will be shown.
-            }
 
           } else if (index === 1) {
-            if (map.getLayer("celltowers-polygons")) {
-              map.removeLayer('celltowers-polygons');
-            }
-            if (response.direction == 'down') { 
-              document.getElementById("cover").style.visibility = "hidden"; // when you scroll down, the cover page will be hided.
-            } else {
-              document.getElementById("cover").style.visibility = "visible"; // when you scroll up, the cover page will be shown.
-            }
+
           } else if (index === 2) {
-            if (map.getLayer("counties-polygons")) {
-              map.removeLayer('counties-polygons');
+            if (map.getLayer("houses-polygons")) {
+              map.removeLayer('houses-polygons');
             }
             if (response.direction == 'down') { 
               document.getElementById("cover").style.visibility = "hidden"; // when you scroll down, the cover page will be hided.
             } else {
               document.getElementById("cover").style.visibility = "visible"; // when you scroll up, the cover page will be shown.
-            }
+            } 
 
           } else if (index === 3) {
             if (map.getLayer("sensitive-polygons")) {
@@ -468,6 +821,70 @@
             } else {
               document.getElementById("cover").style.visibility = "visible"; // when you scroll up, the cover page will be shown.
             }
+
+          } else if (index === 4) {
+            if (map.getLayer("wet-polygons")) {
+              map.removeLayer('wet-polygons');
+            }
+            if (response.direction == 'down') { 
+              document.getElementById("cover").style.visibility = "hidden"; // when you scroll down, the cover page will be hided.
+            } else {
+              document.getElementById("cover").style.visibility = "visible"; // when you scroll up, the cover page will be shown.
+            } 
+
+          } else if (index === 5) {
+            if (map.getLayer("tribe-polygons")) {
+              map.removeLayer('tribe-polygons');
+            }
+            if (map.getLayer("full_tribe-polygons")) {
+              map.removeLayer('full_tribe-polygons');
+            }
+            
+            if (response.direction == 'down') { 
+              document.getElementById("cover").style.visibility = "hidden"; // when you scroll down, the cover page will be hided.
+            } else {
+              document.getElementById("cover").style.visibility = "visible"; // when you scroll up, the cover page will be shown.
+            }
+
+          } else if (index === 6) {
+            // Remove specific layers if they exist
+            if (map.getLayer("rail-lines")) {
+                map.removeLayer('rail-lines');
+            }
+            if (map.getLayer("full_tribe-polygons")) {
+                map.removeLayer('full_tribe-polygons');
+            }
+            if (map.getLayer("spills-points")) {
+                map.removeLayer('spills-points');
+            }
+
+            // Handle cover page visibility based on scroll direction
+            if (response.direction == 'down') { 
+                document.getElementById("cover").style.visibility = "hidden"; // Hide cover when scrolling down
+            } else {
+                document.getElementById("cover").style.visibility = "visible"; // Show cover when scrolling up
+            }
+          }
+        
+
+           else if (index === 7) {
+            // Remove specific layers if they exist
+            if (map.getLayer("rail-lines")) {
+                map.removeLayer('rail-lines');
+            }
+            if (map.getLayer("full_tribe-polygons")) {
+                map.removeLayer('full_tribe-polygons');
+            }
+            if (map.getLayer("spills-points")) {
+                map.removeLayer('spills-points');
+            }
+
+            // Handle cover page visibility based on scroll direction
+            if (response.direction == 'down') { 
+                document.getElementById("cover").style.visibility = "hidden"; // Hide cover when scrolling down
+            } else {
+                document.getElementById("cover").style.visibility = "visible"; // Show cover when scrolling up
+            }
           }
         }
 
@@ -475,6 +892,105 @@
         });
 
     };
+    // Define a popup variable for tribal and wetland data
+    let tribalPopup = new mapboxgl.Popup({
+      closeButton: true,
+      closeOnClick: true
+    });
+
+    let wetlandPopup = new mapboxgl.Popup({
+      closeButton: true,
+      closeOnClick: true
+    });
+
+    let SwinomishPopup = new mapboxgl.Popup({
+      closeButton: true,
+      closeOnClick: true
+    });
+
+    let full_tribalPopup = new mapboxgl.Popup({
+      closeButton: true,
+      closeOnClick: true
+    });
+
+    
+
+    // TRIBE INTERSECT
+    map.on('click', 'tribe-polygons', function(e) {
+      let feature = e.features[0];
+      let popupContent = `<h3>${feature.properties.TRIBAL_NM1}</h3>
+                          <p>${feature.properties.ServiceCor}</p>`;
+      tribalPopup.setLngLat(e.lngLat).setHTML(popupContent).addTo(map);
+    });
+
+    map.on('mouseenter', 'tribe-polygons', function() {
+      map.getCanvas().style.cursor = 'pointer';
+    });
+
+    map.on('mouseleave', 'tribe-polygons', function() {
+      map.getCanvas().style.cursor = '';
+    });
+
+    // WETLANDS
+    map.on('click', 'wet-polygons', function(e) {
+      let feature = e.features[0];
+      let popupContent = `<h3>${feature.properties.WLND_TYPE}</h3>
+                          <p>${feature.properties.ServiceCor}</p>`;
+      wetlandPopup.setLngLat(e.lngLat).setHTML(popupContent).addTo(map);
+    });
+
+    map.on('mouseenter', 'wet-polygons', function() {
+      map.getCanvas().style.cursor = 'pointer';
+    });
+
+    map.on('mouseleave', 'wet-polygons', function() {
+      map.getCanvas().style.cursor = '';
+    });
+
+
+    // CRASH SITES
+    map.on('click', 'spills-points', function(e) {
+      let feature = e.features[0];
+      let popupContent = `<h3>${feature.properties.Date}</h3>
+                          <p>${feature.properties.Gallons_Sp} : gallons of oil </p>`;
+      wetlandPopup.setLngLat(e.lngLat).setHTML(popupContent).addTo(map);
+    });
+
+    map.on('mouseenter', 'spills-points', function() {
+      map.getCanvas().style.cursor = 'pointer';
+    });
+
+    map.on('mouseleave', 'spills-points', function() {
+      map.getCanvas().style.cursor = '';
+    });
+
+
+    // FUll TRIBAL
+    map.on('click', 'full_tribe-polygons', function(e) {
+      let feature = e.features[0];
+      let popupContent = `<h3>${feature.properties.TRIBAL_NM1}</h3>`;
+
+      tribalPopup.setLngLat(e.lngLat).setHTML(popupContent).addTo(map);
+    });
+
+    map.on('mouseenter', 'full_tribe-polygons', function() {
+      map.getCanvas().style.cursor = 'pointer';
+    });
+
+    map.on('mouseleave', 'full_tribe-polygons', function() {
+      map.getCanvas().style.cursor = '';
+    });
+
+
+
+
+
+    const nav = new mapboxgl.NavigationControl();
+    map.addControl(nav, 'top-right');
+
+
+
+
 
     // 5 call the data loading function.
     geojsonFetch();
@@ -482,3 +998,5 @@
 </body>
 
 </html>
+
+  
