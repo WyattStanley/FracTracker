@@ -358,7 +358,7 @@
           'minzoom': 5,
           'paint': {
             'circle-color': '#cc0000',
-            'circle-radius': 7,
+            'circle-radius': 6,
             'circle-opacity': 0.8,
 
           }
@@ -812,24 +812,9 @@
           var index = response.index;
 
           if (index === 0) {
-            if (map.getLayer("train-lines")) {
-              map.removeLayer('train-lines');
-            }
-            if (response.direction == 'down') { 
-              document.getElementById("cover").style.visibility = "hidden"; // when you scroll down, the cover page will be hided.
-            } else {
-              document.getElementById("cover").style.visibility = "visible"; // when you scroll up, the cover page will be shown.
-            }
 
           } else if (index === 1) {
-            if (map.getLayer("train-lines")) {
-              map.removeLayer('train-lines');
-            }
-            if (response.direction == 'down') { 
-              document.getElementById("cover").style.visibility = "hidden"; // when you scroll down, the cover page will be hided.
-            } else {
-              document.getElementById("cover").style.visibility = "visible"; // when you scroll up, the cover page will be shown.
-            }
+
           } else if (index === 2) {
             if (map.getLayer("houses-polygons")) {
               map.removeLayer('houses-polygons');
@@ -838,25 +823,11 @@
               document.getElementById("cover").style.visibility = "hidden"; // when you scroll down, the cover page will be hided.
             } else {
               document.getElementById("cover").style.visibility = "visible"; // when you scroll up, the cover page will be shown.
-            } if (map.getLayer("train-lines")) {
-              map.removeLayer('train-lines');
-            }
-            if (response.direction == 'down') { 
-              document.getElementById("cover").style.visibility = "hidden"; // when you scroll down, the cover page will be hided.
-            } else {
-              document.getElementById("cover").style.visibility = "visible"; // when you scroll up, the cover page will be shown.
-            }
+            } 
 
           } else if (index === 3) {
             if (map.getLayer("sensitive-polygons")) {
               map.removeLayer('sensitive-polygons');
-            }
-            if (response.direction == 'down') { 
-              document.getElementById("cover").style.visibility = "hidden"; // when you scroll down, the cover page will be hided.
-            } else {
-              document.getElementById("cover").style.visibility = "visible"; // when you scroll up, the cover page will be shown.
-            } if (map.getLayer("train-lines")) {
-              map.removeLayer('train-lines');
             }
             if (response.direction == 'down') { 
               document.getElementById("cover").style.visibility = "hidden"; // when you scroll down, the cover page will be hided.
@@ -872,126 +843,61 @@
               document.getElementById("cover").style.visibility = "hidden"; // when you scroll down, the cover page will be hided.
             } else {
               document.getElementById("cover").style.visibility = "visible"; // when you scroll up, the cover page will be shown.
-            } if (map.getLayer("train-lines")) {
-              map.removeLayer('train-lines');
-            }
-            if (response.direction == 'down') { 
-              document.getElementById("cover").style.visibility = "hidden"; // when you scroll down, the cover page will be hided.
-            } else {
-              document.getElementById("cover").style.visibility = "visible"; // when you scroll up, the cover page will be shown.
-            }
+            } 
 
           } else if (index === 5) {
             if (map.getLayer("tribe-polygons")) {
               map.removeLayer('tribe-polygons');
             }
-            if (response.direction == 'down') { 
-              document.getElementById("cover").style.visibility = "hidden"; // when you scroll down, the cover page will be hided.
-            } else {
-              document.getElementById("cover").style.visibility = "visible"; // when you scroll up, the cover page will be shown.
-            }
-            
-            if (map.getLayer("train-lines")) {
-              map.removeLayer('train-lines');
-            }
-            if (response.direction == 'down') { 
-              document.getElementById("cover").style.visibility = "hidden"; // when you scroll down, the cover page will be hided.
-            } else {
-              document.getElementById("cover").style.visibility = "visible"; // when you scroll up, the cover page will be shown.
-            }
-
             if (map.getLayer("full_tribe-polygons")) {
               map.removeLayer('full_tribe-polygons');
             }
+            
             if (response.direction == 'down') { 
               document.getElementById("cover").style.visibility = "hidden"; // when you scroll down, the cover page will be hided.
             } else {
               document.getElementById("cover").style.visibility = "visible"; // when you scroll up, the cover page will be shown.
             }
-
 
           } else if (index === 6) {
-
-            
-            if (map.getLayer("train-lines")) {
-              map.removeLayer('train-lines');
-            }
-            if (response.direction == 'down') { 
-              document.getElementById("cover").style.visibility = "hidden"; // when you scroll down, the cover page will be hided.
-            } else {
-              document.getElementById("cover").style.visibility = "visible"; // when you scroll up, the cover page will be shown.
-            }
-
+            // Remove specific layers if they exist
             if (map.getLayer("rail-lines")) {
-              map.removeLayer('rail-lines');
+                map.removeLayer('rail-lines');
             }
-            if (response.direction == 'down') { 
-              document.getElementById("cover").style.visibility = "hidden"; // when you scroll down, the cover page will be hided.
-            } else {
-              document.getElementById("cover").style.visibility = "visible"; // when you scroll up, the cover page will be shown.
-            }
-
             if (map.getLayer("full_tribe-polygons")) {
-              map.removeLayer('full_tribe-polygons');
+                map.removeLayer('full_tribe-polygons');
             }
-            if (response.direction == 'down') { 
-              document.getElementById("cover").style.visibility = "hidden"; // when you scroll down, the cover page will be hided.
-            } else {
-              document.getElementById("cover").style.visibility = "visible"; // when you scroll up, the cover page will be shown.
-            }
-
             if (map.getLayer("spills-points")) {
-              map.removeLayer('spills-points');
+                map.removeLayer('spills-points');
             }
+
+            // Handle cover page visibility based on scroll direction
             if (response.direction == 'down') { 
-              document.getElementById("cover").style.visibility = "hidden"; // when you scroll down, the cover page will be hided.
+                document.getElementById("cover").style.visibility = "hidden"; // Hide cover when scrolling down
             } else {
-              document.getElementById("cover").style.visibility = "visible"; // when you scroll up, the cover page will be shown.
-            } 
-
-
-          } else if (index === 7) {
-
-            
-            if (map.getLayer("train-lines")) {
-              map.removeLayer('train-lines');
+                document.getElementById("cover").style.visibility = "visible"; // Show cover when scrolling up
             }
-            if (response.direction == 'down') { 
-              document.getElementById("cover").style.visibility = "hidden"; // when you scroll down, the cover page will be hided.
-            } else {
-              document.getElementById("cover").style.visibility = "visible"; // when you scroll up, the cover page will be shown.
-            }
+          }
+        
 
+           else if (index === 7) {
+            // Remove specific layers if they exist
             if (map.getLayer("rail-lines")) {
-              map.removeLayer('rail-lines');
+                map.removeLayer('rail-lines');
             }
-            if (response.direction == 'down') { 
-              document.getElementById("cover").style.visibility = "hidden"; // when you scroll down, the cover page will be hided.
-            } else {
-              document.getElementById("cover").style.visibility = "visible"; // when you scroll up, the cover page will be shown.
-            }
-
             if (map.getLayer("full_tribe-polygons")) {
-              map.removeLayer('full_tribe-polygons');
+                map.removeLayer('full_tribe-polygons');
             }
-            if (response.direction == 'down') { 
-              document.getElementById("cover").style.visibility = "hidden"; // when you scroll down, the cover page will be hided.
-            } else {
-              document.getElementById("cover").style.visibility = "visible"; // when you scroll up, the cover page will be shown.
-            }
-
             if (map.getLayer("spills-points")) {
-              map.removeLayer('spills-points');
+                map.removeLayer('spills-points');
             }
+
+            // Handle cover page visibility based on scroll direction
             if (response.direction == 'down') { 
-              document.getElementById("cover").style.visibility = "hidden"; // when you scroll down, the cover page will be hided.
+                document.getElementById("cover").style.visibility = "hidden"; // Hide cover when scrolling down
             } else {
-              document.getElementById("cover").style.visibility = "visible"; // when you scroll up, the cover page will be shown.
-            } 
-
-
-
-            
+                document.getElementById("cover").style.visibility = "visible"; // Show cover when scrolling up
+            }
           }
         }
 
