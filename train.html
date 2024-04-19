@@ -247,21 +247,21 @@
 
       // 6 wait till the data of washington counties and celltowers are fully loaded.
       let response, train, houses, sensitive, spills, wet, tribe, full_tribe;
-      response = await fetch("assets/Train.geojson");
+      response = await fetch("assets/Train/Train.geojson");
       train = await response.json();
-      response = await fetch("assets/Housing.json");
+      response = await fetch("assets/Train/Housing.json");
       houses = await response.json();
-      response = await fetch("assets/celltowers.geojson");
+      response = await fetch("assets/Train/celltowers.geojson");
       sensitive = await response.json();
-      response = await fetch("assets/crash.geojson")
+      response = await fetch("assets/Train/crash.geojson")
       spills = await response.json();
-      response = await fetch("assets/wetland.geojson")
+      response = await fetch("assets/Train/wetland.geojson")
       wet = await response.json();
-      response = await fetch("assets/tribal_int.geojson")
+      response = await fetch("assets/Train/tribal_int.geojson")
       tribe = await response.json();
-      response = await fetch("assets/Full_Tribal.geojson")
+      response = await fetch("assets/Train/Full_Tribal.geojson")
       full_tribe = await response.json();
-      response = await fetch("assets/rail2.geojson");
+      response = await fetch("assets/Train/rail2.geojson");
       rail = await response.json();
 
 

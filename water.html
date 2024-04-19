@@ -176,7 +176,7 @@
 
   <script>
     // 1. Declare the maps, script panels, and different thematic layers.
-    let map, scriptPanel = scrollama(), housesLayer, trainLayer, sensitiveLayer, spillsLayer, wetLayer, tribeLayer, full_tribeLayer, railLayer;
+    let map, scriptPanel = scrollama(), portsLayer, refineLayer, trafficLayer;
 
     // 2. Intialize the layout.
    
@@ -233,23 +233,14 @@
 
 
       // 6 wait till the data of washington counties and celltowers are fully loaded.
-      let response, train, houses, sensitive, spills, wet, tribe, full_tribe;
-      response = await fetch("assets/Train.geojson");
-      train = await response.json();
-      response = await fetch("assets/Housing.json");
-      houses = await response.json();
-      response = await fetch("assets/celltowers.geojson");
-      sensitive = await response.json();
-      response = await fetch("assets/crash.geojson")
-      spills = await response.json();
-      response = await fetch("assets/wetland.geojson")
-      wet = await response.json();
-      response = await fetch("assets/tribal_int.geojson")
-      tribe = await response.json();
-      response = await fetch("assets/Full_Tribal.geojson")
-      full_tribe = await response.json();
-      response = await fetch("assets/rail2.geojson");
-      rail = await response.json();
+      let response, ports, refine, traffic;
+      response = await fetch("assets/Water/Ports.geojson");
+      ports = await response.json();
+      response = await fetch("assets/Water/refinaries.geojson");
+      refine = await response.json();
+      response = await fetch("assets/Water/traffic.geojson");
+      traffic = await response.json();
+
 
 
 
@@ -257,44 +248,19 @@
       map.on('load', () => {
 
         // 8. add map source and declare layers.
-        map.addSource('train-src', {
+        map.addSource('ports-src', {
           type: 'geojson',
-          data: train
+          data: ports
         });
 
-        map.addSource('houses-src', {
+        map.addSource('refine-src', {
           type: 'geojson',
-          data: houses
+          data: refine
         });
 
-        map.addSource('sensitive-src', {
+        map.addSource('traffic-src', {
           type: 'geojson',
-          data: sensitive
-        });
-
-        map.addSource('spills-src', {
-          type: 'geojson',
-          data: spills
-        });
-        
-        map.addSource('wet-src', {
-          type: 'geojson',
-          data: wet
-        });
-
-        map.addSource('tribe-src', {
-          type: 'geojson',
-          data: tribe
-        });
-
-        map.addSource('full_tribe-src', {
-          type: 'geojson',
-          data: full_tribe
-        });
-
-        map.addSource('rail-src', {
-          type: 'geojson',
-          data: rail
+          data: traffic
         });
 
 
@@ -302,105 +268,43 @@
 
         //declare layers
 
-        trainLayer = {
-          'id': 'train-lines',
-          'type': 'line',
-          'source': 'train-src',
-          'minzoom': 5,
-          'paint': {
-            'line-color': '#000000',
-            'line-width': 1.5
-            
-          }
-        };
-
-        housesLayer = {
-          'id': 'houses-polygons',
-          'type': 'fill',
-          'source': 'houses-src',
-          'minzoom': 5,
-          'paint': {
-            'fill-color': '#cc0000',
-            'fill-opacity': 0.5
-          }
-        };
-
-
-        sensitiveLayer = {
-          'id': 'sensitive-polygons',
-          'type': 'fill',
-          'source': 'sensitive-src',
-          'minzoom': 5,
-          'paint': {
-            'fill-color': '#cc0000',
-            'fill-opacity': 0.3
-
-          }
-        };
-
-        spillsLayer = {
-          'id': 'spills-points',
+        portsLayer = {
+          'id': 'ports-points',
           'type': 'circle',
-          'source': 'spills-src',
+          'source': 'ports-src',
           'minzoom': 5,
           'paint': {
-            'circle-color': '#cc0000',
+            'circle-color': '#000000',
             'circle-radius': 6,
             'circle-opacity': 0.8,
-
-          }
-        };
-
-        wetLayer = {
-          'id': 'wet-polygons',
-          'type': 'fill',
-          'source': 'wet-src',
-          'minzoom': 5,
-          'paint': {
-            'fill-color': '#cc0000',
-            'fill-opacity': 0.5
-
-          }
-        };
-
-        tribeLayer = {
-          'id': 'tribe-polygons',
-          'type': 'fill',
-          'source': 'tribe-src',
-          'minzoom': 5,
-          'paint': {
-            'fill-color': '#cc0000',
-            'fill-opacity': 1
-
-          }
-        };
-
-        full_tribeLayer = {
-          'id': 'full_tribe-polygons',
-          'type': 'fill',
-          'source': 'full_tribe-src',
-          'minzoom': 5,
-          'paint': {
-            'fill-color': '#00cc00',
-            'fill-opacity': 0.3
-
-          }
-        };
-
-        railLayer = {
-          'id': 'rail-lines',
-          'type': 'line',
-          'source': 'rail-src',
-          'minzoom': 5,
-          'paint': {
-            'line-color': '#000000',
-            'line-width': 1.5
             
           }
         };
 
+        refineLayer = {
+          'id': 'refine-points',
+          'type': 'circle',
+          'source': 'refine-src',
+          'minzoom': 5,
+          'paint': {
+            'circle-color': '#000000',
+            'circle-radius': 6,
+            'circle-opacity': 0.8,
+          }
+        };
 
 
+        trafficLayer = {
+          'id': 'traffic-polygons',
+          'type': 'fill',
+          'source': 'traffic-src',
+          'minzoom': 5,
+          'paint': {
+            'fill-color': '#cc0000',
+            'fill-opacity': 0.3
+
+          }
+        };
 
 
 
@@ -419,7 +323,7 @@
 
           var index = response.index; // capture the id of the current scene. 
 
-          // Overview
+          // Refinaries
           
           if (index === 0) { // When enter the first scene
 
@@ -430,23 +334,23 @@
               speed: 0.5
             }); // fly to a new location
             
-            if (typeof (map.getSource('train-src')) == 'undefined') { //if the map source 'counties-src' does not exist
-              map.addSource('train-src', {
+            if (typeof (map.getSource('refine-src')) == 'undefined') { //if the map source 'counties-src' does not exist
+              map.addSource('refine-src', {
                 type: 'geojson',
-                data: train
+                data: refine
               }); // reload the map source of 'counties-src'
             } else {
-              map.getSource('train-src').setData(train); // if the map source does not exist, relaod the data counties to the pre-defined map source 'counties-src'.
+              map.getSource('refine-src').setData(refine); // if the map source does not exist, relaod the data counties to the pre-defined map source 'counties-src'.
 
             }
 
-            if (!map.getLayer("train-lines")) { // if the map layer 'counties-polygons' does not exit
-              map.addLayer(trainLayer);
+            if (!map.getLayer("refine-points")) { // if the map layer 'counties-polygons' does not exit
+              map.addLayer(refineLayer);
             }
             document.getElementById("cover").style.visibility = "hidden"; // Hide the cover page
         
 
-            // Seattle
+            // Ports
         } else if (index === 1) { // When enter the second scene.
             map.flyTo({
               center: [-122.5, 47.5],
@@ -455,440 +359,113 @@
               speed: 0.5
             });
 
-            if (typeof (map.getSource('train-src')) == 'undefined') {
-              map.addSource('train-src', {
+            if (typeof (map.getSource('ports-src')) == 'undefined') {
+              map.addSource('ports-src', {
                 type: 'geojson',
-                data: train
+                data: ports
               });
             } else {
-              map.getSource('train-src').setData(train);
+              map.getSource('ports-src').setData(ports);
 
             }
 
-            if (!map.getLayer("train-lines")) {
-              map.addLayer(trainLayer);
+            if (!map.getLayer("ports-points")) {
+              map.addLayer(portsLayer);
             }
 
           
-         //Housing
+         //Traffic
             
           } else if (index === 2) {
             //Relocate to Seattle
             map.flyTo({
-              center: [-122.5, 47.6],
-              zoom: 20,
-              pitch: 20,
+              center: [-124.5, 48.3],
+              zoom: 7.5,
+              pitch: 10,
               speed: 0.2
 
             });
 
-            if (typeof (map.getSource('houses-src')) == 'undefined') {
-              map.addSource('houses-src', {
+            if (typeof (map.getSource('traffic-src')) == 'undefined') {
+              map.addSource('traffic-src', {
                 type: 'geojson',
-                data: houses
+                data: traffic
               });
               
 
             } else {
-              map.getSource('houses-src').setData(houses);
+              map.getSource('traffic-src').setData(traffic);
 
             }
 
-            if (!map.getLayer("houses-polygons")) {
-              map.addLayer(housesLayer);
+            if (!map.getLayer("traffic-polygons")) {
+              map.addLayer(trafficLayer);
             }
 
-            if (typeof (map.getSource('train-src')) == 'undefined') {
-              map.addSource('train-src', {
+          }
+
+          else if (typeof (map.getSource('ports-src')) == 'undefined') {
+              map.addSource('ports-src', {
                 type: 'geojson',
-                data: train
+                data: ports
               });
             } else {
-              map.getSource('train-src').setData(train);
+              map.getSource('ports-src').setData(ports);
 
             }
 
-            if (!map.getLayer("train-lines")) {
-              map.addLayer(trainLayer);
+            if (!map.getLayer("ports-points")) {
+              map.addLayer(portsLayer);
             }
 
-          //Puget Sound
-
-          } else if (index === 3) {
-
-            map.flyTo({
-              center: [-122.7, 47.3],
-              zoom: 15,
-              pitch: 60,
-              speed: 0.5
-            
-            });
-
-            if (typeof (map.getSource('sensitive-src')) == 'undefined') {
-              map.addSource('sensitive-src', {
-                type: 'geojson',
-                data: sensitive
-              });
-            } else {
-              map.getSource('sensitive-src').setData(sensitive);
-
-            }
-
-            if (!map.getLayer("sesitive-polygons")) {
-              map.addLayer(sensitiveLayer);
-            }
-
-            if (typeof (map.getSource('train-src')) == 'undefined') {
-              map.addSource('train-src', {
-                type: 'geojson',
-                data: train
-              });
-            } else {
-              map.getSource('train-src').setData(train);
-
-            }
-
-            if (!map.getLayer("train-lines")) {
-              map.addLayer(trainLayer);
-            }
-
-          // Wetlands
-
-        } else if (index === 4) {
-
-          map.flyTo({
-            center: [-123, 45.75],
-            zoom: 10,
-            pitch: 70,
-            speed: 0.5
-
-          });
-
-          if (typeof (map.getSource('train-src')) == 'undefined') {
-            map.addSource('train-src', {
-              type: 'geojson',
-              data: train
-            });
-          } else {
-            map.getSource('train-src').setData(train);
-
-          }
-
-          if (!map.getLayer("train-lines")) {
-            map.addLayer(trainLayer);
-          }
-
-          if (typeof (map.getSource('wet-src')) == 'undefined') {
-            map.addSource('wet-src', {
-              type: 'geojson',
-              data: wet
-            });
-          } else {
-            map.getSource('wet-src').setData(wet);
-
-          }
-
-          if (!map.getLayer("wet-polygons")) {
-            map.addLayer(wetLayer);
-          }
-
-
-          // tribal lands
-
-        } else if (index === 5) {
-
-          map.flyTo({
-            center: [-122.7, 47.3],
-            zoom: 7,
-            pitch: 0,
-            speed: 0.5
-
-          });
-
-          if (typeof (map.getSource('full_tribe-src')) == 'undefined') {
-            map.addSource('full_tribe-src', {
-              type: 'geojson',
-              data: full_tribe
-            });
-          } else {
-            map.getSource('full_tribe-src').setData(full_tribe);
-
-          }
-
-          if (!map.getLayer("full_tribe-polygons")) {
-            map.addLayer(full_tribeLayer);
-          }
-
-          if (typeof (map.getSource('train-src')) == 'undefined') {
-            map.addSource('train-src', {
-              type: 'geojson',
-              data: train
-            });
-          } else {
-            map.getSource('train-src').setData(train);
-
-          }
-
-          if (!map.getLayer("train-lines")) {
-            map.addLayer(trainLayer);
-          }
-
-          if (typeof (map.getSource('tribe-src')) == 'undefined') {
-            map.addSource('tribe-src', {
-              type: 'geojson',
-              data: tribe
-            });
-          } else {
-            map.getSource('tribe-src').setData(tribe);
-
-          }
-
-          if (!map.getLayer("tribe-polygons")) {
-            map.addLayer(tribeLayer);
-          }
-
-
-          // Points
-
-        } else if (index === 6) {
-
-          map.flyTo({
-            center: [-122.75, 48.45],
-            zoom: 10,
-            pitch: 0,
-            speed: 0.5
-
-          });
-
-          if (typeof (map.getSource('rail-src')) == 'undefined') {
-            map.addSource('rail-src', {
-              type: 'geojson',
-              data: rail
-            });
-          } else {
-            map.getSource('rail-src').setData(rail);
-
-          }
-
-          if (!map.getLayer("rail-lines")) {
-            map.addLayer(railLayer);
-          }
-
-          if (typeof (map.getSource('full_tribe-src')) == 'undefined') {
-            map.addSource('full_tribe-src', {
-              type: 'geojson',
-              data: full_tribe
-            });
-          } else {
-            map.getSource('full_tribe-src').setData(full_tribe);
-
-          }
-
-          if (!map.getLayer("full_tribe-polygons")) {
-            map.addLayer(full_tribeLayer);
-          }
-
-          if (typeof (map.getSource('train-src')) == 'undefined') {
-            map.addSource('train-src', {
-              type: 'geojson',
-              data: train
-            });
-          } else {
-            map.getSource('train-src').setData(train);
-
-          }
-
-          if (!map.getLayer("train-lines")) {
-            map.addLayer(trainLayer);
-          }
-
-          if (typeof (map.getSource('spills-src')) == 'undefined') {
-            map.addSource('spills-src', {
-              type: 'geojson',
-              data: spills
-            });
-          } else {
-            map.getSource('spills-src').setData(spills);
-
-          }
-
-          if (!map.getLayer("spills-points")) {
-            map.addLayer(spillsLayer);
-          }
-
-
-
-          
-
-          
-
-
-          } else if (index === 7) {
-
-            map.flyTo({
-              center: [-122.75, 48.8],
-              zoom: 10,
-              pitch: 0,
-              speed: 0.5
-
-            });
-
-            if (typeof (map.getSource('rail-src')) == 'undefined') {
-            map.addSource('rail-src', {
-              type: 'geojson',
-              data: rail
-            });
-
-          } else {
-            map.getSource('rail-src').setData(rail);
-
-          }
-
-          if (!map.getLayer("rail-lines")) {
-            map.addLayer(railLayer);
-          }
-
-          if (typeof (map.getSource('full_tribe-src')) == 'undefined') {
-            map.addSource('full_tribe-src', {
-              type: 'geojson',
-              data: full_tribe
-            });
-          } else {
-            map.getSource('full_tribe-src').setData(full_tribe);
-
-          }
-
-          if (!map.getLayer("full_tribe-polygons")) {
-            map.addLayer(full_tribeLayer);
-          }
-
-          if (typeof (map.getSource('train-src')) == 'undefined') {
-            map.addSource('train-src', {
-              type: 'geojson',
-              data: train
-            });
-          } else {
-            map.getSource('train-src').setData(train);
-
-          }
-
-          if (!map.getLayer("train-lines")) {
-            map.addLayer(trainLayer);
-          }
-
-          if (typeof (map.getSource('spills-src')) == 'undefined') {
-            map.addSource('spills-src', {
-              type: 'geojson',
-              data: spills
-            });
-          } else {
-            map.getSource('spills-src').setData(spills);
-
-          }
-
-          if (!map.getLayer("spills-points")) {
-            map.addLayer(spillsLayer);
-          }
-
-
-          }
         }
+
+        
 
         // 11. This function performs when a scene exists the storyboard
         function handleSceneExit(response) {
           var index = response.index;
 
           if (index === 0) {
+            if (map.getLayer("refine-points")) {
+              map.removeLayer('refine-points');
+            }
+            if (response.direction == 'down') { 
+              document.getElementById("cover").style.visibility = "hidden"; // when you scroll down, the cover page will be hided.
+            } else {
+              document.getElementById("cover").style.visibility = "visible"; // when you scroll up, the cover page will be shown.
+            } 
 
           } else if (index === 1) {
+            if (map.getLayer("ports-points")) {
+              map.removeLayer('ports-points');
+            }
+            if (response.direction == 'down') { 
+              document.getElementById("cover").style.visibility = "hidden"; // when you scroll down, the cover page will be hided.
+            } else {
+              document.getElementById("cover").style.visibility = "visible"; // when you scroll up, the cover page will be shown.
+            } 
 
           } else if (index === 2) {
-            if (map.getLayer("houses-polygons")) {
-              map.removeLayer('houses-polygons');
+            if (map.getLayer("traffic-polygons")) {
+              map.removeLayer('traffic-polygons');
             }
+            else if (map.getLayer("ports-points")) {
+              map.removeLayer('ports-points');
+            }
+
             if (response.direction == 'down') { 
               document.getElementById("cover").style.visibility = "hidden"; // when you scroll down, the cover page will be hided.
             } else {
               document.getElementById("cover").style.visibility = "visible"; // when you scroll up, the cover page will be shown.
             } 
 
-          } else if (index === 3) {
-            if (map.getLayer("sensitive-polygons")) {
-              map.removeLayer('sensitive-polygons');
-            }
-            if (response.direction == 'down') { 
-              document.getElementById("cover").style.visibility = "hidden"; // when you scroll down, the cover page will be hided.
-            } else {
-              document.getElementById("cover").style.visibility = "visible"; // when you scroll up, the cover page will be shown.
-            }
 
-          } else if (index === 4) {
-            if (map.getLayer("wet-polygons")) {
-              map.removeLayer('wet-polygons');
-            }
-            if (response.direction == 'down') { 
-              document.getElementById("cover").style.visibility = "hidden"; // when you scroll down, the cover page will be hided.
-            } else {
-              document.getElementById("cover").style.visibility = "visible"; // when you scroll up, the cover page will be shown.
-            } 
 
-          } else if (index === 5) {
-            if (map.getLayer("tribe-polygons")) {
-              map.removeLayer('tribe-polygons');
-            }
-            if (map.getLayer("full_tribe-polygons")) {
-              map.removeLayer('full_tribe-polygons');
-            }
-            
-            if (response.direction == 'down') { 
-              document.getElementById("cover").style.visibility = "hidden"; // when you scroll down, the cover page will be hided.
-            } else {
-              document.getElementById("cover").style.visibility = "visible"; // when you scroll up, the cover page will be shown.
-            }
 
-          } else if (index === 6) {
-            // Remove specific layers if they exist
-            if (map.getLayer("rail-lines")) {
-                map.removeLayer('rail-lines');
-            }
-            if (map.getLayer("full_tribe-polygons")) {
-                map.removeLayer('full_tribe-polygons');
-            }
-            if (map.getLayer("spills-points")) {
-                map.removeLayer('spills-points');
-            }
-
-            // Handle cover page visibility based on scroll direction
-            if (response.direction == 'down') { 
-                document.getElementById("cover").style.visibility = "hidden"; // Hide cover when scrolling down
-            } else {
-                document.getElementById("cover").style.visibility = "visible"; // Show cover when scrolling up
-            }
           }
         
-
-           else if (index === 7) {
-            // Remove specific layers if they exist
-            if (map.getLayer("rail-lines")) {
-                map.removeLayer('rail-lines');
-            }
-            if (map.getLayer("full_tribe-polygons")) {
-                map.removeLayer('full_tribe-polygons');
-            }
-            if (map.getLayer("spills-points")) {
-                map.removeLayer('spills-points');
-            }
-
-            // Handle cover page visibility based on scroll direction
-            if (response.direction == 'down') { 
-                document.getElementById("cover").style.visibility = "hidden"; // Hide cover when scrolling down
-            } else {
-                document.getElementById("cover").style.visibility = "visible"; // Show cover when scrolling up
-            }
-          }
         }
-
-
         });
 
     };
