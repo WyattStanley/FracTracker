@@ -118,7 +118,7 @@ p {
 }
 
 .scene:last-child {
-  padding-bottom: 0;
+  padding-bottom: 30%;
   margin-bottom: 0;
 }
 
@@ -129,18 +129,18 @@ p {
   text-shadow: 0 0 6px white;
 }
 
-[data-scene="4"] div {
+/* [data-scene="4"] div {
   font-size: xxx-large;
-}
+} */
 
-[data-scene="5"] img {
+/* [data-scene="5"] img {
   display: block;
   margin: 2rem auto 0 auto;
   width: 90%;
   border: 5px solid white;
-}
+} */
 
-[data-scene="9"] {
+[data-scene="8"] {
   background: url("../img/background.jpg") no-repeat center center;
   -webkit-background-size: cover;
   -moz-background-size: cover;

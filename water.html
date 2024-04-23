@@ -145,26 +145,7 @@
         <br>
         <p><a href="https://unsplash.com">Photo Source</a> <a href="https://geo.wa.gov/datasets/WSDOT::wsdot-sensitive-aquatic-areas/explore?location=47.220999%2C-120.767400%2C7.36">Data Source</a></p>
     </article>
-    <article class="scene" data-scene="4">
-      <h2>Data Sources:</h2>
-      <p>
-        Couture, F. et al. (2022) ‘Requirements and availability of prey for northeastern pacific southern resident killer whales’, PLoS ONE, 17(6), pp. 1–26. doi:10.1371/journal.pone.0270523.
-        <br>
-        <br>
-        (EPA) Environmental Protection Agency (2023) ‘South Resident Killer Whales’, EPA, https://www.epa.gov/salish-sea/southern-resident-killer-whales 
-        <br>
-        <br>
-        Hanson, M.B. et al. (2021) ‘Endangered predators and endangered prey: Seasonal diet of Southern Resident killer whales’, PLoS ONE, 16(3), pp. 1–27. doi:10.1371/journal.pone.0247031.
-        <br>
-        <br>
-        Olsen, K. (2006) ‘Orcas on the Edge’, National Wildlife, 44(6), pp. 22–30. https://search-ebscohostcom.offcampus.lib.washington.edu/login.aspx?direct=true&db=a9h&AN=22619968&site=ehost-live 
-        <br>
-        <br>
-        Williams, R. et al. (2011) ‘Competing Conservation Objectives for Predators and Prey: Estimating Killer Whale Prey Requirements for Chinook Salmon’, PLoS ONE, 6(11), pp. 1–9. doi:10.1371/journal.pone.0026738.
-      </p>
-      <hr>
-
-    </article>
+ 
 
 
 
@@ -274,7 +255,7 @@
           'source': 'ports-src',
           'minzoom': 5,
           'paint': {
-            'circle-color': '#000000',
+            'circle-color': '#cc0000',
             'circle-radius': 6,
             'circle-opacity': 0.8,
             
@@ -386,6 +367,21 @@
 
             });
 
+            if (typeof (map.getSource('ports-src')) == 'undefined') {
+              map.addSource('ports-src', {
+                type: 'geojson',
+                data: ports
+              });
+            } else {
+              map.getSource('ports-src').setData(ports);
+
+            }
+
+            if (!map.getLayer("ports-points")) {
+              map.addLayer(portsLayer);
+            }
+            document.getElementById("cover").style.visibility = "hidden"; // Hide the cover page
+
             if (typeof (map.getSource('traffic-src')) == 'undefined') {
               map.addSource('traffic-src', {
                 type: 'geojson',
@@ -401,22 +397,11 @@
             if (!map.getLayer("traffic-polygons")) {
               map.addLayer(trafficLayer);
             }
+            document.getElementById("cover").style.visibility = "hidden"; // Hide the cover page
 
           }
 
-          else if (typeof (map.getSource('ports-src')) == 'undefined') {
-              map.addSource('ports-src', {
-                type: 'geojson',
-                data: ports
-              });
-            } else {
-              map.getSource('ports-src').setData(ports);
 
-            }
-
-            if (!map.getLayer("ports-points")) {
-              map.addLayer(portsLayer);
-            }
 
         }
 
@@ -459,9 +444,6 @@
             } else {
               document.getElementById("cover").style.visibility = "visible"; // when you scroll up, the cover page will be shown.
             } 
-
-
-
 
           }
         
