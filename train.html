@@ -694,7 +694,45 @@
             if (!map.getLayer("spills-polygons")) {
               map.addLayer(spillsLayer);
             }
-          } 
+          } else if (index === 7) {
+            map.flyTo({
+              center: [-124.6, 47.6131229],
+              zoom: 6,
+              pitch: 0,
+              speed: 0.5
+            }); // fly to a new location
+
+            if (typeof (map.getSource('full_tribe-src')) == 'undefined') {
+              map.addSource('full_tribe-src', {
+                type: 'geojson',
+                data: full_tribe
+              });
+            } else {
+              map.getSource('full_tribe-src').setData(full_tribe);
+
+            }
+
+            if (!map.getLayer("full_tribe-polygons")) {
+              map.addLayer(full_tribeLayer);
+            }
+
+
+            if (typeof (map.getSource('spills-src')) == 'undefined') {
+              map.addSource('spills-src', {
+                type: 'geojson',
+                data: spills
+              });
+            } else {
+              map.getSource('spills-src').setData(spills);
+
+            }
+
+            if (!map.getLayer("spills-points")) {
+              map.addLayer(spillsLayer);
+            }
+
+
+          }
         }
 
         // 11. This function performs when a scene exists the storyboard
@@ -757,6 +795,21 @@
             } else {
               document.getElementById("cover").style.visibility = "visible"; // when you scroll up, the cover page will be shown.
             } 
+          } else if (index === 5) {
+
+            if (map.getLayer("full_tribe-polygons")) {
+              map.removeLayer('full_tribe-polygons');
+            }
+            if (map.getLayer("spills-points")) {
+              map.removeLayer('spills-points');
+            }
+
+            if (response.direction == 'down') { 
+              document.getElementById("cover").style.visibility = "hidden"; // when you scroll down, the cover page will be hided.
+            } else {
+              document.getElementById("cover").style.visibility = "visible"; // when you scroll up, the cover page will be shown.
+            } 
+
           }
 
 
