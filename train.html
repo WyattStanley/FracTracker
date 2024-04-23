@@ -156,6 +156,14 @@
             
     </article>
 
+    <article class="scene" data-scene="7">
+      <h2>8</h2>
+        <p>
+
+        <p>
+            
+    </article>
+
     <br>
     <br>
     <br>
@@ -179,7 +187,7 @@
 
   <script>
     // 1. Declare the maps, script panels, and different thematic layers.
-    let map, scriptPanel = scrollama(), trainLayer, housesLayer, sensitiveLayer, spillsLayer, wetLayer, tribeLayer, full_tribeLayer, railLayer;
+    let map, scriptPanel = scrollama(), trainLayer, housesLayer, sensitiveLayer, spillsLayer, wetLayer, tribeLayer, full_tribeLayer, railLayer, singleLayer;
 
     // 2. Intialize the layout.
    
@@ -236,7 +244,7 @@
 
 
       // 6 wait till the data of washington counties and celltowers are fully loaded.
-      let response, train, houses, sensitive, spills, wet, tribe, full_tribe, rail;
+      let response, train, houses, sensitive, spills, wet, tribe, full_tribe, rail, single;
       response = await fetch("assets/Train/Train.geojson");
       train = await response.json();
       response = await fetch("assets/Train/Housing.json");
@@ -253,7 +261,8 @@
       full_tribe = await response.json();
       response = await fetch("assets/Train/rail2.geojson");
       rail = await response.json();
-
+      response = await fetch("assets/Train/single.geojson");
+      single = await response.json();
 
 
       // 7. Trigger operations inside of the the ()=> {} funciton while loading the map.
@@ -298,6 +307,11 @@
         map.addSource('rail-src', {
           type: 'geojson',
           data: rail
+        });
+
+        map.addSource('single-src', {
+          type: 'geojson',
+          data: single
         });
 
 
@@ -399,6 +413,18 @@
             'line-color': '#000000',
             'line-width': 1.5
             
+          }
+        };
+
+        singleLayer = {
+          'id': 'single-polygons',
+          'type': 'fill',
+          'source': 'single-src',
+          'minzoom': 5,
+          'paint': {
+            'fill-color': '#00cc00',
+            'fill-opacity': 0.3
+
           }
         };
 
@@ -641,18 +667,18 @@
               speed: 0.5
             }); // fly to a new location
 
-            if (typeof (map.getSource('full_tribe-src')) == 'undefined') {
-              map.addSource('full_tribe-src', {
+            if (typeof (map.getSource('single-src')) == 'undefined') {
+              map.addSource('single-src', {
                 type: 'geojson',
-                data: full_tribe
+                data: single
               });
             } else {
-              map.getSource('full_tribe-src').setData(full_tribe);
+              map.getSource('single-src').setData(single);
 
             }
 
-            if (!map.getLayer("full_tribe-polygons")) {
-              map.addLayer(full_tribeLayer);
+            if (!map.getLayer("single-polygons")) {
+              map.addLayer(singleLayer);
             }
 
             if (typeof (map.getSource('spills-src')) == 'undefined') {
@@ -705,11 +731,12 @@
               document.getElementById("cover").style.visibility = "visible"; // when you scroll up, the cover page will be shown.
             } 
           } else if (index === 5) {
-            if (map.getLayer("full_tribe-polygons")) {
-              map.removeLayer('full_tribe-polygons');
-            }
+
             if (map.getLayer("tribe-polygons")) {
               map.removeLayer('tribe-polygons');
+            }
+            if (map.getLayer("full_tribe-polygons")) {
+              map.removeLayer('full_tribe-polygons');
             }
 
             if (response.direction == 'down') { 
@@ -719,8 +746,8 @@
             } 
 
           } else if (index === 6) {
-            if (map.getLayer("full_tribe-polygons")) {
-              map.removeLayer('full_tribe-polygons');
+            if (map.getLayer("single-polygons")) {
+              map.removeLayer('single-polygons');
             }
             if (map.getLayer("spills-points")) {
               map.removeLayer('spills-points');
