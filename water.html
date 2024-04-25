@@ -106,7 +106,14 @@
     </article>
 
     <article class="scene" data-scene="4">
-      <h2>4: Tug Boats  </h2>
+      <h2>4: Spills  </h2>
+        <p>
+
+        <p>
+    </article>
+
+    <article class="scene" data-scene="5">
+      <h2>4: Response Plans  </h2>
         <p>
 
         <p>
@@ -120,9 +127,10 @@
     <br>
     <br>
     <br>
- 
-
-
+    <br>
+    <br>
+    <br>
+    <br>
 
   </section>
 
@@ -132,7 +140,7 @@
 
   <script>
     // 1. Declare the maps, script panels, and different thematic layers.
-    let map, scriptPanel = scrollama(), portsLayer, ports2Layer, refineLayer, trafficLayer;
+    let map, scriptPanel = scrollama(), portsLayer, ports2Layer, refineLayer, trafficLayer, tugLayer, vspillLayer, respondLayer, incomeLayer;
 
     // 2. Intialize the layout.
    
@@ -189,7 +197,7 @@
 
 
       // 6 wait till the data of washington counties and celltowers are fully loaded.
-      let response, ports, ports2, refine, traffic;
+      let response, ports, ports2, refine, traffic, tug, vspill, respond, income;
       response = await fetch("assets/Water/Ports.geojson");
       ports = await response.json();
       response = await fetch("assets/Water/Ports2.geojson");
@@ -198,6 +206,14 @@
       refine = await response.json();
       response = await fetch("assets/Water/traffic.geojson");
       traffic = await response.json();
+      response = await fetch("assets/Water/tug.geojson");
+      tug = await response.json();
+      response = await fetch("assets/Water/VesselSpills.geojson");
+      vspill = await response.json();
+      response = await fetch("assets/Water/response.geojson");
+      respond = await response.json();
+      response = await fetch("assets/Water/lowincome.geojson");
+      income = await response.json();
 
 
 
@@ -226,6 +242,27 @@
           data: traffic
         });
 
+        map.addSource('tug-src', {
+          type: 'geojson',
+          data: tug
+        });
+
+        map.addSource('vspill-src', {
+          type: 'geojson',
+          data: vspill
+        });
+
+        map.addSource('respond-src', {
+          type: 'geojson',
+          data: respond
+        });
+
+        map.addSource('income-src', {
+          type: 'geojson',
+          data: income
+        });
+
+
 
 
 
@@ -238,8 +275,8 @@
           'minzoom': 5,
           'paint': {
             'circle-color': '#cc0000',
-            'circle-radius': 6,
-            'circle-opacity': 0.8,
+            'circle-radius': 7,
+            'circle-opacity': 0.7,
             
           }
         };
@@ -251,8 +288,8 @@
           'minzoom': 5,
           'paint': {
             'circle-color': '#cc0000',
-            'circle-radius': 6,
-            'circle-opacity': 0.8,
+            'circle-radius': 7,
+            'circle-opacity': 0.7,
             
           }
         };
@@ -261,11 +298,11 @@
           'id': 'refine-points',
           'type': 'circle',
           'source': 'refine-src',
-          'minzoom': 5,
+          'minzoom': 1,
           'paint': {
-            'circle-color': '#000000',
-            'circle-radius': 6,
-            'circle-opacity': 0.8,
+            'circle-color': '#cc0000',
+            'circle-radius': 5,
+            'circle-opacity': 0.4,
           }
         };
 
@@ -277,7 +314,55 @@
           'minzoom': 5,
           'paint': {
             'fill-color': '#cc0000',
-            'fill-opacity': 0.3
+            'fill-opacity': 0.2
+
+          }
+        };
+
+        tugLayer = {
+          'id': 'tug-points',
+          'type': 'circle',
+          'source': 'tug-src',
+          'minzoom': 5,
+          'paint': {
+            'circle-color': '#00cc00',
+            'circle-radius': 5,
+            'circle-opacity': 0.4,
+          }
+        };
+
+        vspillLayer = {
+          'id': 'vspill-points',
+          'type': 'circle',
+          'source': 'vspill-src',
+          'minzoom': 5,
+          'paint': {
+            'circle-color': '#cc0000',
+            'circle-radius': 7,
+            'circle-opacity': 0.5,
+          }
+        };
+
+        respondLayer = {
+          'id': 'respond-points',
+          'type': 'circle',
+          'source': 'respond-src',
+          'minzoom': 5,
+          'paint': {
+            'circle-color': '#00cc00',
+            'circle-radius': 3,
+            'circle-opacity': 0.4,
+          }
+        };
+
+        incomeLayer = {
+          'id': 'income-polygons',
+          'type': 'fill',
+          'source': 'income-src',
+          'minzoom': 5,
+          'paint': {
+            'fill-color': '#cc0000',
+            'fill-opacity': 0.2
 
           }
         };
@@ -305,7 +390,7 @@
 
             map.flyTo({
               center: [-124.6, 47.6131229],
-              zoom: 6,
+              zoom: 6.2,
               pitch: 0,
               speed: 0.5
             }); // fly to a new location
@@ -327,11 +412,11 @@
         
 
             // Ports
-        } else if (index === 1) { // When enter the second scene.
+          } else if (index === 1) { // When enter the second scene.
             map.flyTo({
-              center: [-122.5, 47.5],
-              zoom: 10,
-              pitch: 65,
+              center: [-124, 47],
+              zoom: 8,
+              pitch: 50,
               speed: 0.5
             });
 
@@ -349,16 +434,29 @@
               map.addLayer(portsLayer);
             }
 
-          
-         //Traffic
+            if (typeof (map.getSource('income-src')) == 'undefined') {
+              map.addSource('income-src', {
+                type: 'geojson',
+                data: income
+              });
+              
+
+            } else {
+              map.getSource('income-src').setData(income);
+
+            }
+
+            if (!map.getLayer("income-polygons")) {
+              map.addLayer(incomeLayer);
+            }
             
           } else if (index === 2) {
             //Relocate to Seattle
             map.flyTo({
-              center: [-124.5, 48.3],
+              center: [-124.8, 48.3],
               zoom: 7.5,
               pitch: 10,
-              speed: 0.2
+              speed: 0.5
 
             });
 
@@ -394,6 +492,89 @@
             }
             document.getElementById("cover").style.visibility = "hidden"; // Hide the cover page
 
+          } else if (index === 3) {
+            map.flyTo({
+              center: [-126, 48.3],
+              zoom: 7.5,
+              pitch: 10,
+              speed: 0.5
+
+            });
+
+            if (typeof (map.getSource('tug-src')) == 'undefined') {
+              map.addSource('tug-src', {
+                type: 'geojson',
+                data: tug
+              });
+            } else {
+              map.getSource('tug-src').setData(tug);
+
+            }
+
+            if (!map.getLayer("tug-points")) {
+              map.addLayer(tugLayer);
+            }
+            document.getElementById("cover").style.visibility = "hidden"; // Hide the cover page
+
+          } else if (index === 4) {
+            map.flyTo({
+              center: [-122.75, 48.5],
+              zoom: 10,
+              pitch: 0,
+              speed: 0.5
+
+            });
+
+            if (typeof (map.getSource('vspill-src')) == 'undefined') {
+              map.addSource('vspill-src', {
+                type: 'geojson',
+                data: vspill
+              });
+            } else {
+              map.getSource('vspill-src').setData(vspill);
+
+            }
+
+            if (!map.getLayer("vspill-points")) {
+              map.addLayer(vspillLayer);
+            }
+            document.getElementById("cover").style.visibility = "hidden"; // Hide the cover page
+
+          } else if (index === 5) {
+            map.flyTo({
+              center: [-124, 47],
+              zoom: 8,
+              pitch: 50,
+              speed: 0.5
+
+            });
+
+            if (typeof (map.getSource('respond-src')) == 'undefined') {
+              map.addSource('respond-src', {
+                type: 'geojson',
+                data: respond
+              });
+            } else {
+              map.getSource('respond-src').setData(respond);
+
+            }
+
+            if (!map.getLayer("respond-points")) {
+              map.addLayer(respondLayer);
+            }
+            document.getElementById("cover").style.visibility = "hidden"; // Hide the cover page
+
+          }else if (index === 8) {
+
+            map.flyTo({
+              center: [-122.4121036, 47.6131229],
+              zoom: 7,
+              pitch: 0,
+              speed: 0.5
+
+            });
+
+
           }
 
 
@@ -420,6 +601,10 @@
             if (map.getLayer("ports-points")) {
               map.removeLayer('ports-points');
             }
+            if (map.getLayer("income-polygons")) {
+              map.removeLayer('income-polygons');
+            }
+
             if (response.direction == 'down') { 
               document.getElementById("cover").style.visibility = "hidden"; // when you scroll down, the cover page will be hided.
             } else {
@@ -430,10 +615,40 @@
             if (map.getLayer("traffic-polygons")) {
               map.removeLayer('traffic-polygons');
             }
-            else if (map.getLayer("ports2-points")) {
+            if (map.getLayer("ports2-points")) {
               map.removeLayer('ports2-points');
             }
 
+            if (response.direction == 'down') { 
+              document.getElementById("cover").style.visibility = "hidden"; // when you scroll down, the cover page will be hided.
+            } else {
+              document.getElementById("cover").style.visibility = "visible"; // when you scroll up, the cover page will be shown.
+            } 
+
+          } else if (index === 3) {
+            if (map.getLayer("tug-points")) {
+              map.removeLayer('tug-points');
+            }
+            if (response.direction == 'down') { 
+              document.getElementById("cover").style.visibility = "hidden"; // when you scroll down, the cover page will be hided.
+            } else {
+              document.getElementById("cover").style.visibility = "visible"; // when you scroll up, the cover page will be shown.
+            } 
+
+          } else if (index === 4) {
+            if (map.getLayer("vspill-points")) {
+              map.removeLayer('vspill-points');
+            }
+            if (response.direction == 'down') { 
+              document.getElementById("cover").style.visibility = "hidden"; // when you scroll down, the cover page will be hided.
+            } else {
+              document.getElementById("cover").style.visibility = "visible"; // when you scroll up, the cover page will be shown.
+            } 
+
+          } else if (index === 5) {
+            if (map.getLayer("respond-points")) {
+              map.removeLayer('respond-points');
+            }
             if (response.direction == 'down') { 
               document.getElementById("cover").style.visibility = "hidden"; // when you scroll down, the cover page will be hided.
             } else {
@@ -447,17 +662,28 @@
 
     };
     // Define a popup variable for tribal and wetland data
-    let tribalPopup = new mapboxgl.Popup({
+    
+    let refinePopup = new mapboxgl.Popup({
+      closeButton: true,
+      closeOnClick: true
+    });
+    
+    let vspillPopup = new mapboxgl.Popup({
       closeButton: true,
       closeOnClick: true
     });
 
-    let wetlandPopup = new mapboxgl.Popup({
+    let portsPopup = new mapboxgl.Popup({
       closeButton: true,
       closeOnClick: true
     });
 
-    let SwinomishPopup = new mapboxgl.Popup({
+    let ports2Popup = new mapboxgl.Popup({
+      closeButton: true,
+      closeOnClick: true
+    });
+
+    let trafficPopup = new mapboxgl.Popup({
       closeButton: true,
       closeOnClick: true
     });
@@ -469,69 +695,86 @@
 
     
 
-    // TRIBE INTERSECT
-    map.on('click', 'tribe-polygons', function(e) {
+    // SPILLS
+    map.on('click', 'vspill-points', function(e) {
       let feature = e.features[0];
-      let popupContent = `<h3>${feature.properties.TRIBAL_NM1}</h3>
-                          <p>${feature.properties.ServiceCor}</p>`;
-      tribalPopup.setLngLat(e.lngLat).setHTML(popupContent).addTo(map);
+      let popupContent = `<h3>${feature.properties.CaseName}</h3>
+                          <p>Date: ${feature.properties.Date_incid}</p>
+                          <p>Vessel Type: ${feature.properties.Source}</p>
+                          <p>Oil Type: ${feature.properties.Oil_type}</p>`;
+      vspillPopup.setLngLat(e.lngLat).setHTML(popupContent).addTo(map);
     });
 
-    map.on('mouseenter', 'tribe-polygons', function() {
+    map.on('mouseenter', 'vspill-points', function() {
       map.getCanvas().style.cursor = 'pointer';
     });
 
-    map.on('mouseleave', 'tribe-polygons', function() {
+    map.on('mouseleave', 'vspill-points', function() {
       map.getCanvas().style.cursor = '';
     });
 
-    // WETLANDS
-    map.on('click', 'wet-polygons', function(e) {
+    // REFINARIES
+    map.on('click', 'refine-points', function(e) {
       let feature = e.features[0];
-      let popupContent = `<h3>${feature.properties.WLND_TYPE}</h3>
-                          <p>${feature.properties.ServiceCor}</p>`;
-      wetlandPopup.setLngLat(e.lngLat).setHTML(popupContent).addTo(map);
+      let popupContent = `<h3>${feature.properties.FacilityNa}</h3>
+                          <p>Oil Type: ${feature.properties.OilProduct}</p>`;
+      refinePopup.setLngLat(e.lngLat).setHTML(popupContent).addTo(map);
     });
 
-    map.on('mouseenter', 'wet-polygons', function() {
+    map.on('mouseenter', 'refine-points', function() {
       map.getCanvas().style.cursor = 'pointer';
     });
 
-    map.on('mouseleave', 'wet-polygons', function() {
-      map.getCanvas().style.cursor = '';
-    });
-
-
-    // CRASH SITES
-    map.on('click', 'spills-points', function(e) {
-      let feature = e.features[0];
-      let popupContent = `<h3>${feature.properties.Date}</h3>
-                          <p>${feature.properties.Gallons_Sp} : gallons of oil </p>`;
-      wetlandPopup.setLngLat(e.lngLat).setHTML(popupContent).addTo(map);
-    });
-
-    map.on('mouseenter', 'spills-points', function() {
-      map.getCanvas().style.cursor = 'pointer';
-    });
-
-    map.on('mouseleave', 'spills-points', function() {
+    map.on('mouseleave', 'refine-points', function() {
       map.getCanvas().style.cursor = '';
     });
 
 
-    // FUll TRIBAL
-    map.on('click', 'full_tribe-polygons', function(e) {
+    // Ports
+    map.on('click', 'ports-points', function(e) {
       let feature = e.features[0];
-      let popupContent = `<h3>${feature.properties.TRIBAL_NM1}</h3>`;
-
-      tribalPopup.setLngLat(e.lngLat).setHTML(popupContent).addTo(map);
+      let popupContent = `<h3>${feature.properties.NAME}</h3>
+                          <p>Oil Type: ${feature.properties.TYPE}</p>`;
+      portsPopup.setLngLat(e.lngLat).setHTML(popupContent).addTo(map);
     });
 
-    map.on('mouseenter', 'full_tribe-polygons', function() {
+    map.on('mouseenter', 'ports-points', function() {
       map.getCanvas().style.cursor = 'pointer';
     });
 
-    map.on('mouseleave', 'full_tribe-polygons', function() {
+    map.on('mouseleave', 'ports-points', function() {
+      map.getCanvas().style.cursor = '';
+    });
+
+    map.on('click', 'ports2-points', function(e) {
+      let feature = e.features[0];
+      let popupContent = `<h3>${feature.properties.NAME}</h3>
+                          <p>Oil Type: ${feature.properties.TYPE}</p>`;
+      ports2Popup.setLngLat(e.lngLat).setHTML(popupContent).addTo(map);
+    });
+
+    map.on('mouseenter', 'ports2-points', function() {
+      map.getCanvas().style.cursor = 'pointer';
+    });
+
+    map.on('mouseleave', 'ports2-points', function() {
+      map.getCanvas().style.cursor = '';
+    });
+
+
+    // Traffic
+    map.on('click', 'traffic-polygons', function(e) {
+      let feature = e.features[0];
+      let popupContent = `<h3>2020 Vessel Traffic</h3>`;
+
+      trafficPopup.setLngLat(e.lngLat).setHTML(popupContent).addTo(map);
+    });
+
+    map.on('mouseenter', 'traffic-polygons', function() {
+      map.getCanvas().style.cursor = 'pointer';
+    });
+
+    map.on('mouseleave', 'traffic-polygons', function() {
       map.getCanvas().style.cursor = '';
     });
 
