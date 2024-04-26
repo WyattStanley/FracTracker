@@ -138,7 +138,7 @@ p {
   margin: 2rem auto 0 auto;
   width: 90%;
   border: 5px solid white;
-} */
+}
 
 [data-scene="8"] {
   background: url("../img/background.jpg") no-repeat center center;
@@ -148,7 +148,7 @@ p {
   background-size: cover;
   margin: 0 auto 0 auto !important;
   height: 100vh !important;
-}
+} */
 
 /* Add a black background color to the top navigation */
 .topnav {
@@ -156,7 +156,7 @@ p {
     top: 0;
     width: 100%;
     /* background-color: rgba(0, 0, 0, 0.5); */
-    color: white;
+    color: rgb(255, 255, 255);
     z-index: 1;
   }
   
