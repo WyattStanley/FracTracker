@@ -169,7 +169,7 @@
 
   <script>
     // 1. Declare the maps, script panels, and different thematic layers.
-    let map, scriptPanel = scrollama(), trainLayer, train2Layer, train3Layer, train4Layer, train5Layer, train6Layer, train7Layer, train8Layer, houseLayer, psLayer, wetLayer, tribeLayer, full_tribe, singleLayer, spillsLayer, spills2Layer, full_tribe2Layer;
+    let map, scriptPanel = scrollama(), trainLayer, train2Layer, train3Layer, train4Layer, train5Layer, train6Layer, train7Layer, train8Layer, houseLayer, psLayer, wetLayer, tribeLayer, full_tribe, singleLayer, spillsLayer, spills2Layer, full_tribe2Layer, refineLayer;
 
     // 2. Intialize the layout.
    
@@ -226,7 +226,7 @@
 
 
       // 6 wait till the data of washington counties and celltowers are fully loaded.
-      let response, train, train2, train3, train4, train5, train6, train7, train8, house, ps, wet, tribe, full_tribe, single, spills, spills2, full_tribe2;
+      let response, train, train2, train3, train4, train5, train6, train7, train8, house, ps, wet, tribe, full_tribe, single, spills, spills2, full_tribe2, refine;
       response = await fetch("assets/Train/Train.geojson");
       train = await response.json();
       response = await fetch("assets/Train/Train2.geojson");
@@ -262,6 +262,8 @@
       spills2 = await response.json();
       response = await fetch("assets/Train/Full_Tribal2.json");
       full_tribe2 = await response.json();
+      response = await fetch("assets/Water/refinaries.geojson");
+      refine = await response.json();
 
 
 
@@ -356,6 +358,11 @@
         map.addSource('full_tribe2-src', {
           type: 'geojson',
           data: full_tribe2
+        });
+
+        map.addSource('refine-src', {
+          type: 'geojson',
+          data: refine
         });
 
 
@@ -563,6 +570,18 @@
           }
         };
 
+        refineLayer = {
+          'id': 'refine-points',
+          'type': 'circle',
+          'source': 'refine-src',
+          'minzoom': 1,
+          'paint': {
+            'circle-color': '#cc0000',
+            'circle-radius': 5,
+            'circle-opacity': 0.3
+          }
+        };
+
 
 
         // 9. Initialize the script panel
@@ -603,6 +622,21 @@
 
             if (!map.getLayer("train-lines")) { // if the map layer 'counties-polygons' does not exit
               map.addLayer(trainLayer);
+            }
+            document.getElementById("cover").style.visibility = "hidden"; // Hide the cover page
+
+            if (typeof (map.getSource('refine-src')) == 'undefined') {
+              map.addSource('refine-src', {
+                type: 'geojson',
+                data: refine
+              });
+            } else {
+              map.getSource('refine-src').setData(refine);
+
+            }
+
+            if (!map.getLayer("refine-points")) {
+              map.addLayer(refineLayer);
             }
             document.getElementById("cover").style.visibility = "hidden"; // Hide the cover page
         
@@ -954,6 +988,9 @@
           if (index === 0) {
             if (map.getLayer("train-lines")) {
               map.removeLayer('train-lines');
+            }
+            if (map.getLayer("refine-points")) {
+              map.removeLayer('refine-points');
             }
             if (response.direction == 'down') { 
               document.getElementById("cover").style.visibility = "hidden"; // when you scroll down, the cover page will be hided.
