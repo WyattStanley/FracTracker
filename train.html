@@ -187,7 +187,7 @@
 
   <script>
     // 1. Declare the maps, script panels, and different thematic layers.
-    let map, scriptPanel = scrollama(), trainLayer, housesLayer, sensitiveLayer, spillsLayer, wetLayer, tribeLayer, full_tribeLayer, railLayer, singleLayer, lummiLayer;
+    let map, scriptPanel = scrollama(), trainLayer, housesLayer, sensitiveLayer, spillsLayer, wetLayer, tribeLayer, full_tribeLayer, singleLayer;
 
     // 2. Intialize the layout.
    
@@ -244,12 +244,12 @@
 
 
       // 6 wait till the data of washington counties and celltowers are fully loaded.
-      let response, train, houses, sensitive, spills, wet, tribe, full_tribe, rail, singleLayer;
+      let response, train, houses, sensitive, spills, wet, tribe, full_tribe, singleLayer;
       response = await fetch("assets/Train/Train.geojson");
       train = await response.json();
       response = await fetch("assets/Train/Housing.json");
       houses = await response.json();
-      response = await fetch("assets/Train/celltowers.geojson");
+      response = await fetch("assets/Train/celltowers.json");
       sensitive = await response.json();
       response = await fetch("assets/Train/crash.geojson")
       spills = await response.json();
@@ -259,8 +259,6 @@
       tribe = await response.json();
       response = await fetch("assets/Train/Full_Tribal.geojson")
       full_tribe = await response.json();
-      response = await fetch("assets/Train/rail2.geojson");
-      rail = await response.json();
       response = await fetch("assets/Train/single.geojson");
       single = await response.json();
 
@@ -401,18 +399,6 @@
             'fill-color': '#00cc00',
             'fill-opacity': 0.3
 
-          }
-        };
-
-        railLayer = {
-          'id': 'rail-lines',
-          'type': 'line',
-          'source': 'rail-src',
-          'minzoom': 5,
-          'paint': {
-            'line-color': '#000000',
-            'line-width': 1.5
-            
           }
         };
 
