@@ -118,6 +118,16 @@
 
     </article>
 
+    <article class="scene" data-scene="6">
+      <h2>Data Sources:</h2>
+      <p>
+      </p>
+
+      
+
+
+    </article>
+
 
 
     <br>
@@ -140,7 +150,7 @@
   
   <script>
     // 1. Declare the maps, script panels, and different thematic layers.
-    let map, scriptPanel = scrollama(), refineLayer, olympicLayer, olympic2Layer, ysLayer, ys2Layer, tmLayer, nwLayer, owetLayer, yswetLayer, tmwetLayer, nwwetLayer, orfLayer, ysrfLayer, tmrfLayer, nwrfLayer, income;
+    let map, scriptPanel = scrollama(), refineLayer, olympicLayer, olympic2Layer, ysLayer, ys2Layer, tmLayer, nwLayer, owetLayer, yswetLayer, tmwetLayer, nwwetLayer, orfLayer, orf2Layer, ysrfLayer, tmrfLayer, nwrfLayer, income, o_tribeLayer;
 
     // 2. Intialize the layout.
    
@@ -197,7 +207,7 @@
 
 
       // 6 wait till the data of washington counties and celltowers are fully loaded.
-      let response, refine, olympic, olympic2, ys, ys2, tm, nw, owet, yswet, tmwet, nwwet, orf, ysrf, tmrf, nwrf, income;
+      let response, refine, olympic, olympic2, ys, ys2, tm, nw, owet, yswet, tmwet, nwwet, orf, orf2, ysrf, tmrf, nwrf, income, o_tribe;
       
       // ALL REFINARIES
       response = await fetch("assets/Water/refinaries.geojson");
@@ -231,6 +241,8 @@
       // // REFINARIES BY PIPELINE
       response = await fetch("assets/Pipe/olym_refine.geojson");
       orf = await response.json();
+      response = await fetch("assets/Pipe/olym_refine.geojson");
+      orf2 = await response.json();
       response = await fetch("assets/Pipe/ys_refine.geojson");
       ysrf = await response.json();
       // response = await fetch("assets/Pipe/tm_refine.geojson");
@@ -241,6 +253,10 @@
       //LOW INCOME
       response = await fetch("assets/Water/lowincome.geojson");
       income = await response.json();
+      response = await fetch("assets/Pipe/o_tribe.geojson");
+      o_tribe = await response.json();
+      
+
 
 
 
@@ -318,6 +334,11 @@
           data: orf
         });
 
+        map.addSource('orf2-src', {
+          type: 'geojson',
+          data: orf2
+        });
+
         map.addSource('ysrf-src', {
           type: 'geojson',
           data: ysrf
@@ -337,6 +358,11 @@
         map.addSource('income-src', {
           type: 'geojson',
           data: income
+        });
+
+        map.addSource('o_tribe-src', {
+          type: 'geojson',
+          data: o_tribe
         });
 
 
@@ -496,6 +522,18 @@
           }
         };
 
+        orf2Layer = {
+          'id': 'orf2-points',
+          'type': 'circle',
+          'source': 'orf2-src',
+          'minzoom': 5,
+          'paint': {
+            'circle-color': '#cc0000',
+            'circle-radius': 5,
+            'circle-opacity': 1,
+          }
+        };
+
         ysrfLayer = {
           'id': 'ysrf-points',
           'type': 'circle',
@@ -541,6 +579,18 @@
           'minzoom': 5,
           'paint': {
             'fill-color': '#cc0000',
+            'fill-opacity': 0.5
+
+          }
+        };
+
+        o_tribeLayer = {
+          'id': 'o_tribe-polygons',
+          'type': 'fill',
+          'source': 'o_tribe-src',
+          'minzoom': 5,
+          'paint': {
+            'fill-color': '#00cc00',
             'fill-opacity': 0.5
 
           }
@@ -703,7 +753,44 @@
             }
 
             
-          }else if (index === 4) { // When enter the second scene.
+          } else if (index === 4) { // When enter the second scene.
+            map.flyTo({
+              center: [-123, 48.7],
+              zoom: 9,
+              pitch: 0,
+              speed: 0.5
+            });
+
+            if (typeof (map.getSource('o_tribe-src')) == 'undefined') {
+              map.addSource('o_tribe-src', {
+                type: 'geojson',
+                data: o_tribe
+              });
+            } else {
+              map.getSource('o_tribe-src').setData(o_tribe);
+
+            }
+
+            if (!map.getLayer("o_tribe-polygons")) {
+              map.addLayer(o_tribeLayer);
+            }
+
+            if (typeof (map.getSource('orf2-src')) == 'undefined') {
+              map.addSource('orf2-src', {
+                type: 'geojson',
+                data: orf
+              });
+            } else {
+              map.getSource('orf2-src').setData(orf);
+
+            }
+
+            if (!map.getLayer("orf2-points")) {
+              map.addLayer(orf2Layer);
+            }
+
+            
+          } else if (index === 5) { // When enter the second scene.
             map.flyTo({
               center: [-120.5, 47],
               zoom: 7,
@@ -740,7 +827,7 @@
             }
 
             
-          } else if (index === 5) {
+          } else if (index === 6) {
             //Relocate to Seattle
             map.flyTo({
               center: [-118, 47.5],
@@ -853,7 +940,21 @@
               document.getElementById("cover").style.visibility = "visible"; // when you scroll up, the cover page will be shown.
             } 
 
-          }else if (index === 4) {
+          } else if (index === 4) {
+            if (map.getLayer("orf2-points")) {
+              map.removeLayer('orf2-points');
+            }
+            if (map.getLayer("o_tribe-polygons")) {
+              map.removeLayer('o_tribe-polygons');
+            }
+
+            if (response.direction == 'down') { 
+              document.getElementById("cover").style.visibility = "hidden"; // when you scroll down, the cover page will be hided.
+            } else {
+              document.getElementById("cover").style.visibility = "visible"; // when you scroll up, the cover page will be shown.
+            } 
+
+          }else if (index === 5) {
             if (map.getLayer("ys-lines")) {
               map.removeLayer('ys-lines');
             }
@@ -867,7 +968,7 @@
               document.getElementById("cover").style.visibility = "visible"; // when you scroll up, the cover page will be shown.
             } 
 
-          } else if (index === 5) {
+          } else if (index === 6) {
             if (map.getLayer("ys2-lines")) {
               map.removeLayer('ys2-lines');
             }
