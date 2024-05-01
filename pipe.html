@@ -87,19 +87,19 @@
         </p>
     </article>
     <article class="scene" data-scene="2">
-      <h2>3: Wetlands</h2>
+      <h2>3: Olympic Wetlands</h2>
         <p>
         </p>
         <p><a href="https://geo.wa.gov/datasets/waecy::washington-coast-chinook-salmon/explore?location=45.581300%2C-118.865825%2C6.05">Data Source</a></p>
     </article>
 
     <article class="scene" data-scene="3">
-      <h2>4: Low Income Areas </h2>
+      <h2>4: Olympic Low Income Areas </h2>
         <p>
         </p>
     </article>
     <article class="scene" data-scene="4">
-      <h2>5: Tribal Lands</h2>
+      <h2>5: Olympic Tribal Lands</h2>
       <p>
       </p>
 
@@ -109,7 +109,7 @@
     </article>
 
     <article class="scene" data-scene="5">
-      <h2>6: Yellowstone Pipeline</h2>
+      <h2>6: TransMountain Pipeline</h2>
       <p>
       </p>
 
@@ -119,7 +119,7 @@
     </article>
 
     <article class="scene" data-scene="6">
-      <h2>7: Wetlands</h2>
+      <h2>7: TransMountain Wetlands</h2>
       <p>
       </p>
 
@@ -127,6 +127,81 @@
 
 
     </article>
+
+    <article class="scene" data-scene="7">
+      <h2>8: TrainsMountain Income</h2>
+      <p>
+      </p>
+
+      
+
+
+    </article>
+
+
+    <article class="scene" data-scene="8">
+      <h2>9: Yellowstone Pipeline</h2>
+      <p>
+      </p>
+
+      
+
+
+    </article>
+
+    <article class="scene" data-scene="9">
+      <h2>10: Yellowstone Wetlands</h2>
+      <p>
+      </p>
+
+      
+
+
+    </article>
+
+    <article class="scene" data-scene="10">
+      <h2>11: yesllowstone Income</h2>
+      <p>
+      </p>
+
+      
+
+
+    </article>
+
+    <article class="scene" data-scene="11">
+      <h2>12: Northwest Pipeline</h2>
+      <p>
+      </p>
+
+      
+
+
+    </article>
+
+    <article class="scene" data-scene="12">
+      <h2>13: Northwest Pipeline</h2>
+      <p>
+      </p>
+
+      
+
+
+    </article>
+
+    <article class="scene" data-scene="13">
+      <h2>14: Northwest Pipeline</h2>
+      <p>
+      </p>
+
+      
+
+
+    </article>
+
+
+
+
 
 
 
@@ -151,7 +226,7 @@
   
   <script>
     // 1. Declare the maps, script panels, and different thematic layers.
-    let map, scriptPanel = scrollama(), refineLayer, olympicLayer, olympic2Layer, ysLayer, ys2Layer, tmLayer, nwLayer, owetLayer, yswetLayer, tmwetLayer, nwwetLayer, orfLayer, orf2Layer, ysrfLayer, tmrfLayer, nwrfLayer, income, o_tribeLayer;
+    let map, scriptPanel = scrollama(), refineLayer, olympicLayer, olympic2Layer, ysLayer, ys2Layer, tmLayer, tm2Layer, nwLayer, nw2Layer, owetLayer, yswetLayer, tmwetLayer, nwwetLayer, orfLayer, orf2Layer, ysrfLayer, tmrf2Layer, nwrfLayer, income, o_tribeLayer;
 
     // 2. Intialize the layout.
    
@@ -208,7 +283,7 @@
 
 
       // 6 wait till the data of washington counties and celltowers are fully loaded.
-      let response, refine, olympic, olympic2, ys, ys2, tm, nw, owet, yswet, tmwet, nwwet, orf, orf2, ysrf, tmrf, nwrf, income, o_tribe;
+      let response, refine, olympic, olympic2, ys, ys2, tm, tm2, nw, nw2, owet, yswet, tmwet, nwwet, orf, orf2, ysrf, tmrf, tmrf2, nwrf, income, o_tribe;
       
       // ALL REFINARIES
       response = await fetch("assets/Water/refinaries.geojson");
@@ -226,18 +301,22 @@
       ys2 = await response.json();
       response = await fetch("assets/Pipe/TM_pipeline.geojson");
       tm = await response.json();
+      response = await fetch("assets/Pipe/TM_pipeline.geojson");
+      tm2 = await response.json();
       response = await fetch("assets/Pipe/NW_Pipeline.geojson");
       nw = await response.json();
+      response = await fetch("assets/Pipe/NW_Pipeline.geojson");
+      nw2 = await response.json();
 
       // // WETLANDS
       response = await fetch("assets/Pipe/oly_wet.geojson");
       owet = await response.json();
       response = await fetch("assets/Pipe/ys_wet.geojson");
       yswet = await response.json();
-      // response = await fetch("assets/Pipe/tm_wet.geojson");
-      // tmwet = await response.json();
-      // response = await fetch("assets/Pipe/nw_wet.geojson");
-      // nwwet = await response.json();
+      response = await fetch("assets/Pipe/tm_wet.geojson");
+      tmwet = await response.json();
+      response = await fetch("assets/Pipe/nw_wet.geojson");
+      nwwet = await response.json();
 
       // // REFINARIES BY PIPELINE
       response = await fetch("assets/Pipe/olym_refine.geojson");
@@ -246,10 +325,12 @@
       orf2 = await response.json();
       response = await fetch("assets/Pipe/ys_refine.geojson");
       ysrf = await response.json();
-      // response = await fetch("assets/Pipe/tm_refine.geojson");
-      // tmrf = await response.json();
-      // response = await fetch("assets/Pipe/nw_refine.geojson");
-      // nwrf = await response.json();
+      response = await fetch("assets/Pipe/tm_refine.geojson");
+      tmrf = await response.json();
+      response = await fetch("assets/Pipe/tm_refine.geojson");
+      tmrf2 = await response.json();
+      response = await fetch("assets/Pipe/nw_com.geojson");
+      nwrf = await response.json();
 
       //LOW INCOME
       response = await fetch("assets/Water/lowincome.geojson");
@@ -301,9 +382,19 @@
           data: tm
         });
 
+        map.addSource('tm2-src', {
+          type: 'geojson',
+          data: tm2
+        });
+
         map.addSource('nw-src', {
           type: 'geojson',
           data: nw
+        });
+
+        map.addSource('nw2-src', {
+          type: 'geojson',
+          data: nw2
         });
 
         // WETLANDS
@@ -348,6 +439,11 @@
         map.addSource('tmrf-src', {
           type: 'geojson',
           data: tmrf
+        });
+
+        map.addSource('tmrf2-src', {
+          type: 'geojson',
+          data: tmrf2
         });
 
         map.addSource('nwrf-src', {
@@ -438,18 +534,42 @@
         };
 
         tmLayer = {
-          'id': 'tm-points',
-          'type': 'circle',
+          'id': 'tm-lines',
+          'type': 'line',
           'source': 'tm-src',
           'minzoom': 5,
           'paint': {
-            'circle-color': '#cc0000',
-            'circle-radius': 7,
-            'circle-opacity': 0.5,
+            'line-color': '#000000',
+            'line-width': 1.5
+          
+          }
+        };
+
+        tm2Layer = {
+          'id': 'tm2-lines',
+          'type': 'line',
+          'source': 'tm2-src',
+          'minzoom': 5,
+          'paint': {
+            'line-color': '#000000',
+            'line-width': 1.5
+          
           }
         };
 
         nwLayer = {
+          'id': 'nw-lines',
+          'type': 'line',
+          'source': 'nw-src',
+          'minzoom': 5,
+          'paint': {
+            'line-color': '#000000',
+            'line-width': 1.5
+            
+          }
+        };
+
+        nw2Layer = {
           'id': 'nw-lines',
           'type': 'line',
           'source': 'nw-src',
@@ -493,7 +613,7 @@
           'minzoom': 5,
           'paint': {
             'fill-color': '#cc0000',
-            'fill-opacity': 0.2
+            'fill-opacity': 1
 
           }
         };
@@ -505,7 +625,7 @@
           'minzoom': 5,
           'paint': {
             'fill-color': '#cc0000',
-            'fill-opacity': 0.2
+            'fill-opacity': 1
 
           }
         };
@@ -553,9 +673,21 @@
           'source': 'tmrf-src',
           'minzoom': 5,
           'paint': {
-            'circle-color': '#00cc00',
+            'circle-color': '#cc0000',
             'circle-radius': 5,
-            'circle-opacity': 0.4,
+            'circle-opacity': 1,
+          }
+        };
+
+        tmrf2Layer = {
+          'id': 'tmrf2-points',
+          'type': 'circle',
+          'source': 'tmrf2-src',
+          'minzoom': 5,
+          'paint': {
+            'circle-color': '#cc0000',
+            'circle-radius': 5,
+            'circle-opacity': 1,
           }
         };
 
@@ -565,9 +697,9 @@
           'source': 'nwrf-src',
           'minzoom': 5,
           'paint': {
-            'circle-color': '#00cc00',
+            'circle-color': '#cc0000',
             'circle-radius': 5,
-            'circle-opacity': 0.4,
+            'circle-opacity': 1,
           }
         };
 
@@ -579,8 +711,8 @@
           'source': 'income-src',
           'minzoom': 5,
           'paint': {
-            'fill-color': '#cc0000',
-            'fill-opacity': 0.5
+            'fill-color': '#0000ff',
+            'fill-opacity': 0.2
 
           }
         };
@@ -592,7 +724,7 @@
           'minzoom': 5,
           'paint': {
             'fill-color': '#00cc00',
-            'fill-opacity': 0.5
+            'fill-opacity': 0.2
 
           }
         };
@@ -793,7 +925,118 @@
             
           } else if (index === 5) { // When enter the second scene.
             map.flyTo({
-              center: [-120.5, 47],
+              center: [-123, 49],
+              zoom: 8,
+              pitch: 0,
+              speed: 0.5
+            });
+
+            if (typeof (map.getSource('tm-src')) == 'undefined') {
+              map.addSource('tm-src', {
+                type: 'geojson',
+                data: tm
+              });
+            } else {
+              map.getSource('tm-src').setData(tm);
+
+            }
+
+            if (!map.getLayer("tm-lines")) {
+              map.addLayer(tmLayer);
+            }
+
+            if (typeof (map.getSource('tmrf-src')) == 'undefined') {
+              map.addSource('tmrf-src', {
+                type: 'geojson',
+                data: tmrf
+              });
+            } else {
+              map.getSource('tmrf-src').setData(tmrf);
+
+            }
+
+            if (!map.getLayer("tmrf-points")) {
+              map.addLayer(tmrfLayer);
+            }
+
+            
+          } else if (index === 6) { // When enter the second scene.
+            map.flyTo({
+              center: [-123, 48.7],
+              zoom: 9,
+              pitch: 0,
+              speed: 0.5
+            });
+
+            if (typeof (map.getSource('tm2-src')) == 'undefined') {
+              map.addSource('tm2-src', {
+                type: 'geojson',
+                data: tm2
+              });
+            } else {
+              map.getSource('tm2-src').setData(tm2);
+
+            }
+
+            if (!map.getLayer("tm2-lines")) {
+              map.addLayer(tm2Layer);
+            }
+
+            if (typeof (map.getSource('tmwet-src')) == 'undefined') {
+              map.addSource('tmwet-src', {
+                type: 'geojson',
+                data: tmwet
+              });
+            } else {
+              map.getSource('tmwet-src').setData(tmwet);
+
+            }
+
+            if (!map.getLayer("tmwet-polygons")) {
+              map.addLayer(tmwetLayer);
+            }
+
+            
+          } else if (index === 7) { // When enter the second scene.
+            map.flyTo({
+              center: [-123, 48.7],
+              zoom: 9,
+              pitch: 0,
+              speed: 0.5
+            });
+
+            if (typeof (map.getSource('income-src')) == 'undefined') {
+              map.addSource('income-src', {
+                type: 'geojson',
+                data: income
+              });
+            } else {
+              map.getSource('income-src').setData(income);
+
+            }
+
+            if (!map.getLayer("income-polygons")) {
+              map.addLayer(incomeLayer);
+            }
+
+            if (typeof (map.getSource('tmrf2-src')) == 'undefined') {
+              map.addSource('tmrf2-src', {
+                type: 'geojson',
+                data: tmrf2
+              });
+            } else {
+              map.getSource('tmrf2-src').setData(tmrf2);
+
+            }
+
+            if (!map.getLayer("tmrf2-points")) {
+              map.addLayer(tmrf2Layer);
+            }
+
+            
+          } else if (index === 8) { // When enter the second scene.
+            map.flyTo({
+              center: [-119.7, 47],
               zoom: 7,
               pitch: 0,
               speed: 0.5
@@ -828,7 +1071,7 @@
             }
 
             
-          } else if (index === 6) {
+          } else if (index === 9) {
             //Relocate to Seattle
             map.flyTo({
               center: [-118, 47.5],
@@ -866,7 +1109,119 @@
             }
 
 
-          } else if (index === 8) {
+          } else if (index === 10) {
+            //Relocate to Seattle
+            map.flyTo({
+              center: [-119, 47],
+              zoom: 7.7,
+              pitch: 0,
+              speed: 0.5
+            });
+
+            if (typeof (map.getSource('income-src')) == 'undefined') {
+              map.addSource('income-src', {
+                type: 'geojson',
+                data: income
+              });
+            } else {
+              map.getSource('income-src').setData(income);
+
+            }
+
+            if (!map.getLayer("income-polygons")) {
+              map.addLayer(incomeLayer);
+            }
+
+            if (typeof (map.getSource('ysrf-src')) == 'undefined') {
+              map.addSource('ysrf-src', {
+                type: 'geojson',
+                data: ysrf
+              });
+            } else {
+              map.getSource('ysrf-src').setData(ysrf);
+
+            }
+
+            if (!map.getLayer("ysrf-points")) {
+              map.addLayer(ysrfLayer);
+            }
+
+
+          } else if (index === 11) { // When enter the second scene.
+            map.flyTo({
+              center: [-123, 46],
+              zoom: 6.2,
+              pitch: 0,
+              speed: 0.5
+            });
+
+            if (typeof (map.getSource('nw-src')) == 'undefined') {
+              map.addSource('nw-src', {
+                type: 'geojson',
+                data: nw
+              });
+            } else {
+              map.getSource('nw-src').setData(nw);
+
+            }
+
+            if (!map.getLayer("nw-lines")) {
+              map.addLayer(nwLayer);
+            }
+
+            if (typeof (map.getSource('nwrf-src')) == 'undefined') {
+              map.addSource('nwrf-src', {
+                type: 'geojson',
+                data: nwrf
+              });
+            } else {
+              map.getSource('nwrf-src').setData(nwrf);
+
+            }
+
+            if (!map.getLayer("nwrf-points")) {
+              map.addLayer(nwrfLayer);
+            }
+
+            
+          } else if (index === 12) { // When enter the second scene.
+            map.flyTo({
+              center: [-123, 46],
+              zoom: 6.2,
+              pitch: 0,
+              speed: 0.5
+            });
+
+            if (typeof (map.getSource('nw2-src')) == 'undefined') {
+              map.addSource('nw2-src', {
+                type: 'geojson',
+                data: nw2
+              });
+            } else {
+              map.getSource('nw2-src').setData(nw2);
+
+            }
+
+            if (!map.getLayer("nw2-lines")) {
+              map.addLayer(nw2Layer);
+            }
+
+            if (typeof (map.getSource('nwwet-src')) == 'undefined') {
+              map.addSource('nwet-src', {
+                type: 'geojson',
+                data: nwwet
+              });
+            } else {
+              map.getSource('nwwet-src').setData(nwwet);
+
+            }
+
+            if (!map.getLayer("nwwet-polygons")) {
+              map.addLayer(nwwetLayer);
+            }
+
+            
+          } else if (index === 14) {
 
             map.flyTo({
               center: [-122.4121036, 47.6131229],
@@ -955,7 +1310,49 @@
               document.getElementById("cover").style.visibility = "visible"; // when you scroll up, the cover page will be shown.
             } 
 
-          }else if (index === 5) {
+          } else if (index === 5) {
+            if (map.getLayer("tm-lines")) {
+              map.removeLayer('tm-lines');
+            }
+            if (map.getLayer("tmrf-points")) {
+              map.removeLayer('tmrf-points');
+            }
+
+            if (response.direction == 'down') { 
+              document.getElementById("cover").style.visibility = "hidden"; // when you scroll down, the cover page will be hided.
+            } else {
+              document.getElementById("cover").style.visibility = "visible"; // when you scroll up, the cover page will be shown.
+            } 
+
+          } else if (index === 6) {
+            if (map.getLayer("tm2-lines")) {
+              map.removeLayer('tm2-lines');
+            }
+            if (map.getLayer("tmwet-polygons")) {
+              map.removeLayer('tmwet-polygons');
+            }
+
+            if (response.direction == 'down') { 
+              document.getElementById("cover").style.visibility = "hidden"; // when you scroll down, the cover page will be hided.
+            } else {
+              document.getElementById("cover").style.visibility = "visible"; // when you scroll up, the cover page will be shown.
+            } 
+
+          } else if (index === 7) {
+            if (map.getLayer("tmrf2-points")) {
+              map.removeLayer('tmrf2-points');
+            }
+            if (map.getLayer("income-polygons")) {
+              map.removeLayer('income-polygons');
+            }
+
+            if (response.direction == 'down') { 
+              document.getElementById("cover").style.visibility = "hidden"; // when you scroll down, the cover page will be hided.
+            } else {
+              document.getElementById("cover").style.visibility = "visible"; // when you scroll up, the cover page will be shown.
+            } 
+
+          }else if (index === 8) {
             if (map.getLayer("ys-lines")) {
               map.removeLayer('ys-lines');
             }
@@ -969,12 +1366,54 @@
               document.getElementById("cover").style.visibility = "visible"; // when you scroll up, the cover page will be shown.
             } 
 
-          } else if (index === 6) {
+          } else if (index === 9) {
             if (map.getLayer("ys2-lines")) {
               map.removeLayer('ys2-lines');
             }
             if (map.getLayer("yswet-polygons")) {
               map.removeLayer('yswet-polygons');
+            }
+
+            if (response.direction == 'down') { 
+              document.getElementById("cover").style.visibility = "hidden"; // when you scroll down, the cover page will be hided.
+            } else {
+              document.getElementById("cover").style.visibility = "visible"; // when you scroll up, the cover page will be shown.
+            } 
+
+          } else if (index === 10) {
+            if (map.getLayer("ysrf-points")) {
+              map.removeLayer('ysrf-points');
+            }
+            if (map.getLayer("income-polygons")) {
+              map.removeLayer('income-polygons');
+            }
+
+            if (response.direction == 'down') { 
+              document.getElementById("cover").style.visibility = "hidden"; // when you scroll down, the cover page will be hided.
+            } else {
+              document.getElementById("cover").style.visibility = "visible"; // when you scroll up, the cover page will be shown.
+            } 
+
+          } else if (index === 11) {
+            if (map.getLayer("nw-lines")) {
+              map.removeLayer('nw-lines');
+            }
+            if (map.getLayer("nwrf-points")) {
+              map.removeLayer('nwrf-points');
+            }
+
+            if (response.direction == 'down') { 
+              document.getElementById("cover").style.visibility = "hidden"; // when you scroll down, the cover page will be hided.
+            } else {
+              document.getElementById("cover").style.visibility = "visible"; // when you scroll up, the cover page will be shown.
+            } 
+
+          } else if (index === 12) {
+            if (map.getLayer("nw2-lines")) {
+              map.removeLayer('nw2-lines');
+            }
+            if (map.getLayer("nwwet-polygons")) {
+              map.removeLayer('nwwet-polygons');
             }
 
             if (response.direction == 'down') { 
