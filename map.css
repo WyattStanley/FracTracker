@@ -34,6 +34,14 @@ h2 {
   margin-bottom: 0;
 }
 
+h3 {
+  font-size: large;
+  font-weight: 500;
+  margin-left: 10px;
+	color:black;
+  text-shadow: 0 0 3px rgba(255, 255, 255, 0.95);
+}
+
 h5 {
   font-size: x-large;
   text-align: center;
