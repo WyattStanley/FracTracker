@@ -1948,7 +1948,7 @@
 
     // 5
 
-        // Tribal
+
     map.on('click', 'ys-lines', function(e) {
       let feature = e.features[0];
       let popupContent = `<h3>${feature.properties.Name}</h3>
@@ -1980,6 +1980,76 @@
     map.on('mouseleave', 'nw-lines', function() {
       map.getCanvas().style.cursor = '';
     });
+
+    map.on('click', 'ysrf-points', function(e) {
+      let feature = e.features[0];
+      let popupContent = `<h3>${feature.properties.FacilityNa}</h3>
+                          <p>Type: ${feature.properties.FacilityTy}</p>`;
+
+      ysrfPopup.setLngLat(e.lngLat).setHTML(popupContent).addTo(map);
+    });
+
+    map.on('mouseenter', 'ysrf-points', function() {
+      map.getCanvas().style.cursor = 'pointer';
+    });
+
+    map.on('mouseleave', 'ysrf-points', function() {
+      map.getCanvas().style.cursor = '';
+    });
+
+    // 6
+
+    map.on('click', 'ys2-lines', function(e) {
+      let feature = e.features[0];
+      let popupContent = `<h3>${feature.properties.Name}</h3>
+                          <p>Type: ${feature.properties.Type}</p>`;
+
+      ys2Popup.setLngLat(e.lngLat).setHTML(popupContent).addTo(map);
+    });
+
+    map.on('mouseenter', 'ys2-lines', function() {
+      map.getCanvas().style.cursor = 'pointer';
+    });
+
+    map.on('mouseleave', 'ys2-lines', function() {
+      map.getCanvas().style.cursor = '';
+    });
+
+    map.on('click', 'nw2-lines', function(e) {
+      let feature = e.features[0];
+      let popupContent = `<h3>NorthWest Pipeline</h3>
+                          <p>Type: ${feature.properties.Type}</p>`;
+
+      nw2Popup.setLngLat(e.lngLat).setHTML(popupContent).addTo(map);
+    });
+
+    map.on('mouseenter', 'nw2-lines', function() {
+      map.getCanvas().style.cursor = 'pointer';
+    });
+
+    map.on('mouseleave', 'nw2-lines', function() {
+      map.getCanvas().style.cursor = '';
+    });
+
+
+    map.on('click', 'spill-points', function(e) {
+      let feature = e.features[0];
+      let popupContent = `<h3>${feature.properties.Name}</h3>
+                          <p>Gallons Spilled: ${feature.properties.Gallons}</p>
+                          <p>Date: ${feature.properties.Date}`;
+
+      spillPopup.setLngLat(e.lngLat).setHTML(popupContent).addTo(map);
+    });
+
+    map.on('mouseenter', 'spill-points', function() {
+      map.getCanvas().style.cursor = 'pointer';
+    });
+
+    map.on('mouseleave', 'spill-points', function() {
+      map.getCanvas().style.cursor = '';
+    });
+
+
 
 
 
