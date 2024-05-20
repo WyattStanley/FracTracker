@@ -425,7 +425,7 @@
   
   <script>
     // 1. Declare the maps, script panels, and different thematic layers.
-    let map, scriptPanel = scrollama(), refineLayer, rolympicLayer, olympic2Layer, ysLayer, ys2Layer, tmLayer, tm2Layer, nwLayer, nw2Layer, owetLayer, yswetLayer, tmwetLayer, nwwetLayer, orfLayer, orf2Layer, ysrfLayer, tmrf2Layer, nwrfLayer, income, o_tribeLayer, pumpLayer, spillLayer;
+    let map, scriptPanel = scrollama(), refineLayer, rolympicLayer, olympic2Layer, ysLayer, ys2Layer, tmLayer, tm2Layer, nwLayer, nw2Layer, owetLayer, yswetLayer, tmwetLayer, nwwetLayer, orfLayer, orf2Layer, ysrfLayer, tmrf2Layer, nwrfLayer, income, o_tribeLayer, pumpLayer, spillLayer, fireLayer;
 
     // 2. Intialize the layout.
    
@@ -482,7 +482,7 @@
 
 
       // 6 wait till the data of washington counties and celltowers are fully loaded.
-      let response, refine, olympic, olympic2, ys, ys2, tm, tm2, nw, nw2, owet, yswet, tmwet, nwwet, orf, orf2, ysrf, tmrf, tmrf2, nwrf, income, o_tribe, pump, spill;
+      let response, refine, olympic, olympic2, ys, ys2, tm, tm2, nw, nw2, owet, yswet, tmwet, nwwet, orf, orf2, ysrf, tmrf, tmrf2, nwrf, income, o_tribe, pump, spill, fire;
       
       // ALL REFINARIES
       response = await fetch("assets/Water/refinaries.geojson");
@@ -540,6 +540,9 @@
       pump = await response.json();
       response = await fetch("assets/Pipe/o_spill.geojson");
       spill = await response.json();
+      response = await fetch("assets/Pipe/fire.geojson");
+      fire = await response.json();
+
       
 
 
@@ -675,6 +678,11 @@
           data: spill
         });
 
+        map.addSource('fire-src', {
+          type: 'geojson',
+          data: fire
+        });
+
 
 
 
@@ -692,7 +700,7 @@
           'source': 'refine-src',
           'minzoom': 1,
           'paint': {
-            'circle-color': '#cc0000',
+            'circle-color': '#424242',
             'circle-radius': 5,
             'circle-opacity': 0.4,
           }
@@ -802,7 +810,7 @@
           'source': 'owet-src',
           'minzoom': 5,
           'paint': {
-            'fill-color': '#cc0000',
+            'fill-color': '#1E7E14',
             'fill-opacity': 1
 
           }
@@ -814,7 +822,7 @@
           'source': 'yswet-src',
           'minzoom': 5,
           'paint': {
-            'fill-color': '#cc0000',
+            'fill-color': '#1E7E14',
             'fill-opacity': 1
 
           }
@@ -826,7 +834,7 @@
           'source': 'tmwet-src',
           'minzoom': 5,
           'paint': {
-            'fill-color': '#cc0000',
+            'fill-color': '#1E7E14',
             'fill-opacity': 1
 
           }
@@ -838,7 +846,7 @@
           'source': 'nwwet-src',
           'minzoom': 5,
           'paint': {
-            'fill-color': '#cc0000',
+            'fill-color': '#1E7E14',
             'fill-opacity': 1
 
           }
@@ -851,7 +859,7 @@
           'source': 'orf-src',
           'minzoom': 5,
           'paint': {
-            'circle-color': '#cc0000',
+            'circle-color': '#424242',
             'circle-radius': 5,
             'circle-opacity': 1,
           }
@@ -863,7 +871,7 @@
           'source': 'orf2-src',
           'minzoom': 5,
           'paint': {
-            'circle-color': '#cc0000',
+            'circle-color': '#424242',
             'circle-radius': 5,
             'circle-opacity': 1,
           }
@@ -875,7 +883,7 @@
           'source': 'ysrf-src',
           'minzoom': 5,
           'paint': {
-            'circle-color': '#cc0000',
+            'circle-color': '#424242',
             'circle-radius': 5,
             'circle-opacity': 1,
           }
@@ -887,7 +895,7 @@
           'source': 'tmrf-src',
           'minzoom': 5,
           'paint': {
-            'circle-color': '#cc0000',
+            'circle-color': '#424242',
             'circle-radius': 5,
             'circle-opacity': 1,
           }
@@ -899,7 +907,7 @@
           'source': 'tmrf2-src',
           'minzoom': 5,
           'paint': {
-            'circle-color': '#cc0000',
+            'circle-color': '#424242',
             'circle-radius': 5,
             'circle-opacity': 1,
           }
@@ -911,7 +919,7 @@
           'source': 'nwrf-src',
           'minzoom': 5,
           'paint': {
-            'circle-color': '#cc0000',
+            'circle-color': '#424242',
             'circle-radius': 5,
             'circle-opacity': 1,
           }
@@ -949,8 +957,8 @@
           'source': 'pump-src',
           'minzoom': 5,
           'paint': {
-            'circle-color': '#000000',
-            'circle-radius': 6,
+            'circle-color': '#002EFF',
+            'circle-radius': 7,
             'circle-opacity': 1,
           }
         };
@@ -964,6 +972,18 @@
             'circle-color': '#cc0000',
             'circle-radius': 6,
             'circle-opacity': 1,
+          }
+        };
+
+        fireLayer = {
+          'id': 'fire-polygons',
+          'type': 'fill',
+          'source': 'fire-src',
+          'minzoom': 5,
+          'paint': {
+            'fill-color': '#E95712',
+            'fill-opacity': 0.2
+
           }
         };
 
@@ -1433,6 +1453,20 @@
               map.addLayer(nw2Layer);
             }
 
+            if (typeof (map.getSource('fire-src')) == 'undefined') {
+              map.addSource('fire-src', {
+                type: 'geojson',
+                data: fire
+              });
+            } else {
+              map.getSource('fire-src').setData(fire);
+
+            }
+
+            if (!map.getLayer("fire-polygons")) {
+              map.addLayer(fireLayer);
+            }
+
             
           } else if (index == 10) {
 
@@ -1641,6 +1675,9 @@
           } else if (index === 9) {
             if (map.getLayer("nw2-lines")) {
               map.removeLayer('nw2-lines');
+            }
+            if (map.getLayer("fire-polygons")) {
+              map.removeLayer('fire-polygons');
             }
 
             if (response.direction == 'down') { 
