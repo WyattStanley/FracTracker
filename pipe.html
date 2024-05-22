@@ -132,14 +132,14 @@
           <li>This system has "..the capacity for up to about <b>240,000 bpd</b> (28,600 m3 per day) depending on petroleum types..." (TransMountain).</li>
         </ul>
         <p>
-          This map displays the Olympic and Trans Mountain pipelines along with the refineries they connected to. Click on the points to display additional information.
+          This map displays the Olympic and Trans Mountain pipelines along with the refineries they connected to. Click on the points and lines to display additional information.
         </p>
 
         <p>
           This map includes <a href="https://apps.ecology.wa.gov/coastalatlas/storymaps/spills/spills_sm.html?&Tab=nt1" target="_blank">refinery data</a>, the Olympic pipeline was based on 
           <a href="https://www.bp.com/content/dam/bp/country-sites/en_us/united-states/home/documents/products-and-services/pipelines/olympic-overview.pdf" target="_blank">this image</a>, 
           <a href="https://atlas.eia.gov/datasets/eia::crude-oil-pipelines/explore?location=47.376601%2C-120.396332%2C7.00" target="_blank">trans mountain data</a>, and 
-          <a href="https://www.transmountain.com/product-destination">information</a> on the refineries the trans mountain pipeline connects to.
+          <a href="https://www.transmountain.com/product-destination">information</a> on the refineries the Trans Mountain pipeline connects to.
         </p>
     </article>
     <article class="scene" data-scene="2">
@@ -159,14 +159,14 @@
         </p>
         <p>
           The Olympic pipeline runs south from Bellingham to Vancouver Washington and is within a half mile radius of <b>1,671</b> wetland areas 
-          encompassing <b>21,761</b> square miles of land. 
+          encompassing <b>21,761</b> square miles of wetland area. 
         </p>
         <p>
           <h3>Trans Mountain Pipeline:</h3>
         </p>
         <p>
           The Trans Mountain pipeline runs into Bellingham Washington from Canada and is within a half mile radius of <b>502</b> wetland areas encompassing 
-          <b>3,607</b> square miles of land.
+          <b>3,607</b> square miles of wetland area.
           <br>
           <br>
 
@@ -218,6 +218,9 @@
         oil spills.
         <br>
         <br>
+        Click the points and areas to display refinery information and the green areas to display the names of these tribal lands.
+        <br>
+        <br>
         This map includes <a href="https://www.arcgis.com/apps/View/index.html?appid=359a365f28014151a1ce821dd6f6745c" target="_blank">tribal lands data</a>.
       </p>
     </article>
@@ -228,7 +231,7 @@
         <h3>Northwest Pipeline:</h3>
       </p>
       <ul>
-        <li>This is a 1,377-mile pipeline system. <a href="https://www.tcenergy.com/operations/natural-gas/gas-transmission-northwest-xpress-project/" target="_blank">(TC Energy)</a></li>
+        <li>This is a <b>1,377-mile</b> pipeline system. <a href="https://www.tcenergy.com/operations/natural-gas/gas-transmission-northwest-xpress-project/" target="_blank">(TC Energy)</a></li>
          <br>
         <li>This system has transported natural gas since 1962 (TC Energy).</li>
          <br>
@@ -249,7 +252,8 @@
         <li>The Yellowstone pipeline has a maximum diameter of 10 inches that transports fossil fuels from Montana to Washington (Yellowstone).</li>
       </ul>  
       <p>
-        This map displays the Northwest pipeline, the Chevron pipeline, and the Yellowstone pipeline along with the refineries they connected to. Click on the points to display additional information.
+        This map displays the Northwest pipeline, the Chevron pipeline, and the Yellowstone pipeline along with the refineries they connected to. Click on the points to display additional information. The Chevron and Yellowstone 
+        pipleine is <a href="https://www.researchgate.net/figure/3-WA-Department-of-Ecology-Marine-and-Pipeline-Routes-in-Puget-Sound-Region-Credit_fig1_268810713" target="_blank">based on</a> this map.
       </p>
 
     </article>
@@ -345,11 +349,14 @@
         
         <p>
           This map displays all the pump stations for this pipeline along with the three proposed pump stations.
-  
-  
+          <br>
+          <br>
+          The current pump stations are displayed as black points while the proposed updated pump stations are represented in blue.
+          <br>
+          <br>
           <a href="https://www.tcenergy.com/siteassets/pdfs/natural-gas/gas-transmission-northwest/tc-gas-transmission-northwest-map.pdf" target="_blank">NW Pipeline Based On</a>
           <a href="https://tcenergy.com/siteassets/pdfs/natural-gas/gtnxp/tce-gas-transmission-northwest-xpress-map.pdf" target="_blank">Compressors Based On</a>
-          <a href="https://www.researchgate.net/figure/3-WA-Department-of-Ecology-Marine-and-Pipeline-Routes-in-Puget-Sound-Region-Credit_fig1_268810713" target="_blank">Based On</a>
+          
         </p>
 
       
@@ -381,7 +388,10 @@
 
         <br>
         <br>
-        This map displays the NorthWest pipeline along with major fire data from 2021 to 2023.
+        This map displays the NorthWest pipeline along with major fire data from 1973 to 2022.
+        <br>
+        <br>
+        This map contains Washington<a href="https://geo.wa.gov/datasets/6f31b076628d4f8ca5a964cbefd2cccc/explore">fire data</a>.
       </ul>
 
     </article>
@@ -400,7 +410,7 @@
         and other wildlife and which flow into the Skagit River" (AP News). 
         <br>
         <br>
-        This map displays where the Olympic Pipeline burst on December 12th, 2023.
+        This map displays the location of the Olympic Pipeline burst on December 12th, 2023.
       </p>
 
       
@@ -1832,6 +1842,11 @@
 
     // 9
 
+    let firePopup = new mapboxgl.Popup({
+      closeButton: true,
+      closeOnClick: true
+    });
+
     // 10
 
     let olympic2 = new mapboxgl.Popup({
@@ -1843,6 +1858,8 @@
       closeButton: true,
       closeOnClick: true
     });
+
+
 
     
     // 0 
@@ -2087,6 +2104,41 @@
     });
 
     map.on('mouseleave', 'spill-points', function() {
+      map.getCanvas().style.cursor = '';
+    });
+
+
+    map.on('click', 'pump-points', function(e) {
+      let feature = e.features[0];
+      let popupContent = `<h3>${feature.properties.Name}</h3>
+                          <p>Status: ${feature.properties.Status}</p>`;
+
+      pumpPopup.setLngLat(e.lngLat).setHTML(popupContent).addTo(map);
+    });
+
+    map.on('mouseenter', 'pump-points', function() {
+      map.getCanvas().style.cursor = 'pointer';
+    });
+
+    map.on('mouseleave', 'pump-points', function() {
+      map.getCanvas().style.cursor = '';
+    });
+
+    
+    map.on('click', 'fire-polygons', function(e) {
+      let feature = e.features[0];
+      let popupContent = `Fire Name:<h3>${feature.properties.FIRENAME}</h3>
+                          <p>Acres Effected: ${feature.properties.FIRENUM}</p>
+                          <p>Year: ${feature.properties.YEAR}`;
+
+      firePopup.setLngLat(e.lngLat).setHTML(popupContent).addTo(map);
+    });
+
+    map.on('mouseenter', 'fire-polygons', function() {
+      map.getCanvas().style.cursor = 'pointer';
+    });
+
+    map.on('mouseleave', 'fire-polygons', function() {
       map.getCanvas().style.cursor = '';
     });
 
