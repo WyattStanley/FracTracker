@@ -1,3 +1,3 @@
 # FracTracker
 
-https://wyattstanley.github.io/FrackTracker/index.html
+https://wyattstanley.github.io/FracTracker/index.html
