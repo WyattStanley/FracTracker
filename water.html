@@ -199,10 +199,10 @@
     </article>
 
     <article class="scene" data-scene="4">
-      <h2>5: Environmental Justice Areas</h2>
+      <h2>5: Low Income Areas</h2>
         <p>
-          Low income areas are at a higher risk of living in proximity to petroleum facilities. 
-          Petroleum terminals built in low income areas contribute to "disproportionate exposure to pollution from  
+          Low-income areas are at a higher risk of living in proximity to petroleum facilities. 
+          Petroleum terminals built in low-income areas contribute to "disproportionate exposure to pollution from  
           burning fossil fuels and chemicals leaching into the water table" <a href="https://www.climaterealityproject.org/blog/how-pipelines-fuel-climate-injustice#:~:text=According%20to%20the%20Southern%20Environmental,or%20belonging%20to%20racial%20or" target="_blank">(The Climate Reality Project).</a>. 
         </p>
 
@@ -1169,7 +1169,7 @@
     // Income
     map.on('click', 'income-polygons', function(e) {
       let feature = e.features[0];
-      let popupContent = `<h3>Low Income Percent: ${feature.properties.LOWMODPCT}%</h3>`;
+      let popupContent = `<h3>Low-income Percent: ${feature.properties.LOWMODPCT}%</h3>`;
       incomePopup.setLngLat(e.lngLat).setHTML(popupContent).addTo(map);
     });
 
