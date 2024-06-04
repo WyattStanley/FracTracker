@@ -149,7 +149,7 @@
       <h2>3: Western WA Wetlands</h2>
         <p>
           Wetlands are an important environmental asset to Washington State. "Wetlands are among the most productive ecosystems in the 
-          world, comparable to rain forests and coral reefs" <a href="https://www.epa.gov/wetlands/why-are-wetlands-important" target="_blank">EPA.</a> 
+          world, comparable to rain forests and coral reefs" <a href="https://www.epa.gov/wetlands/why-are-wetlands-important" target="_blank">(EPA).</a> 
           <br>
           <br>
           This map displays all the wetlands in Washington that are within a half mile radius of these pipelines. If a spill were to occur, these 
@@ -234,7 +234,7 @@
         <h3>Northwest Pipeline:</h3>
       </p>
       <ul>
-        <li>This is a <b>1,377-mile</b> pipeline system. <a href="https://www.tcenergy.com/operations/natural-gas/gas-transmission-northwest-xpress-project/" target="_blank">(TC Energy)</a></li>
+        <li>This is a <b>1,377-mile</b> pipeline system <a href="https://www.tcenergy.com/operations/natural-gas/gas-transmission-northwest-xpress-project/" target="_blank">(TC Energy)</a>.</li>
          <br>
         <li>This system has transported natural gas since 1962 (TC Energy).</li>
          <br>
@@ -265,7 +265,7 @@
       <h2>7: Eastern WA Wetlands</h2>
       <p>
         Wetlands are an important environmental asset to Washington State. "Wetlands are among the most productive ecosystems in the 
-        world, comparable to rain forests and coral reefs" <a href="https://www.epa.gov/wetlands/why-are-wetlands-important" target="_blank">EPA.</a> 
+        world, comparable to rain forests and coral reefs" <a href="https://www.epa.gov/wetlands/why-are-wetlands-important" target="_blank">(EPA)</a>.
         <br>
         <br>
         This map displays all the wetlands in Washington that are within a half mile radius of these pieplines. If a spill were to occur, these 
@@ -555,7 +555,7 @@
       pump = await response.json();
       response = await fetch("assets/Pipe/o_spill.geojson");
       spill = await response.json();
-      response = await fetch("assets/Pipe/fire.geojson");
+      response = await fetch("assets/Pipe/fire.json");
       fire = await response.json();
 
       
@@ -1358,8 +1358,8 @@
           } else if (index === 7) {
             //Relocate to Seattle
             map.flyTo({
-              center: [-119, 47],
-              zoom: 7.7,
+              center: [-119.7, 47],
+              zoom: 7,
               pitch: 0,
               speed: 0.5
             });
@@ -1395,7 +1395,7 @@
 
           } else if (index === 8) { // When enter the second scene.
             map.flyTo({
-              center: [-123, 46],
+              center: [-122, 47],
               zoom: 6.2,
               pitch: 0,
               speed: 0.5
@@ -1448,7 +1448,7 @@
             
           } else if (index === 9) { // When enter the second scene.
             map.flyTo({
-              center: [-123, 46],
+              center: [-122, 47],
               zoom: 6.2,
               pitch: 0,
               speed: 0.5
